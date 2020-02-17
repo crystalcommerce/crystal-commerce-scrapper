@@ -1,0 +1,38 @@
+{
+  "name": "scrapper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "server": "babel-node index.js",
+    "dev": "NODE_ENV=development npm-run-all server"
+  },
+  "author": "Omid Amiri",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "axios": "^0.19.1",
+    "body-parser": "^1.19.0",
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
+    "cron": "^1.7.2",
+    "dateformat": "^3.0.3",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "https": "^1.0.0",
+    "hubspot": "^2.3.7",
+    "moment": "^2.24.0",
+    "mongodb": "^3.5.1",
+    "multer": "^1.4.2",
+    "npm-run-all": "^4.1.5",
+    "puppeteer": "^2.1.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.3",
+    "@babel/core": "^7.8.3",
+    "@babel/node": "^7.8.3",
+    "@babel/preset-env": "^7.8.3"
+  }
+}
