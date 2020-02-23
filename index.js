@@ -6,8 +6,7 @@ const app = express()
 const port = 3000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-import x from './modules/db.yugioh-card';
-let y = new x();
-y.start();
-app.get('/', (req, res) => res.send('Scrapper'));
+app.set('view engine', 'pug');
+app.set('views', './views');
+app.get('/', (req, res) => res.render('index'));
 http.createServer(app).listen(port);

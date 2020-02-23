@@ -46,10 +46,12 @@ export default class Yugioh {
         });
 
         for (var i = 0; i < this.data.length; i++){
-            this.data[i] = await this.loadPageData(this.data[i]);
+            let item = await this.loadPageData(this.data[i]);
+            if(this.onNewItem) this.onNewItem(item);
+            this.data[i] = item;
         }
 
-        return this.data();
+        return this.data;
     }
 
     async loadPageData(pageInfo) {
@@ -80,27 +82,6 @@ export default class Yugioh {
                     });
             return items.concat(items2);
         });
-
-        // [ 
-        //     { title: 'Attribute', value: 'LIGHT' },
-        //     { title: 'Level', value: '2' },
-        //     { title: 'Monster Type', value: 'Spellcaster' },
-        //     { title: 'Card Type', value: 'Flip / Effect' },
-        //     { title: 'ATK', value: '900' },
-        //     { title: 'DEF', value: '100' },
-        //     { title: 'Card Text', value: 'FLIP: You can Special Summon 1 "Shaddoll" monster from your hand in face-up or face-down Defense Position.\nIf this card is sent to the GY by a card effect: You can send 1 "Shaddoll" monster from your hand to the GY, and if you do, for the rest of this turn, all monsters you control gain ATK/DEF equal to the original Level of that monster sent to the GY x 100. You can only use 1 "Qadshaddoll Keios" effect per turn, and only once that turn.' }
-        // ];
-    
-        // { id: 'id', title: 'Product Id' },
-        // { id: 'img', title: 'Product Image' },
-        // { id: 'name', title: 'Product Name' },
-        // { id: 'atk_def', title: 'ATK/DEF' },
-        // { id: 'attr', title: 'Attribute' },
-        // { id: 'text', title: 'Card Text' },
-        // { id: 'level', title: 'Level' },
-        // { id: 'type', title: 'Monster Type' },
-        // { id: 'passcode', title: 'Passcode' }
-        
         pageInfo["atk_def"] = texts.filter(a => a.title == 'ATK').shift() + "/" + texts.filter(a => a.title == 'DEF').shift();
         pageInfo["attr"] = texts.filter(a => a.title == 'Attribute').shift();
         pageInfo["text"] = texts.filter(a => a.title == 'Card Text').shift();
