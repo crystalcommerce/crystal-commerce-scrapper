@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.3/css/uikit.min.css" />
 </head>
-<form action="/users/login" method="POST">
+<form action="/users/register" method="POST">
 <body>
     <div class="uk-section uk-section-muted uk-flex uk-flex-middle uk-animation-fade" uk-height-viewport>
         <div class="uk-width-1-1">
@@ -16,30 +16,38 @@
                     <div class="uk-width-1-1@m">
                         <div
                             class="uk-margin uk-width-large uk-margin-auto uk-card uk-card-default uk-card-body uk-box-shadow-large">
-                            <span class="uk-text-center">Please Enter your <b>Email</b> and <b>Password</b></span>
+                            <!--span class="uk-text-center">Register With Your Email Account</b></span-->
                             <br />
                             <form>
                                 <div class="uk-margin">
                                     <div class="uk-inline uk-width-1-1">
+                                        <span class="uk-form-icon" ></span>
+                                        <input class="uk-input uk-form-large" placeholder="Name" id="name" name="name" type="text">
+                                    </div>
+                                </div>
+                                <div class="uk-margin">
+                                    <div class="uk-inline uk-width-1-1">
                                         <span class="uk-form-icon" uk-icon="icon: mail"></span>
-                                        <input type="email" id="email" name="email" class="uk-input uk-form-large"  placeholder="Enter Email"/>
+                                        <input class="uk-input uk-form-large" placeholder="Email" id="email" name="email" type="text">
                                     </div>
                                 </div>
                                 <div class="uk-margin">
                                     <div class="uk-inline uk-width-1-1">
                                         <span class="uk-form-icon" uk-icon="icon: lock"></span>
-                                        <input class="uk-input uk-form-large" id="password" name="password" type="password" placeholder="Enter Password">
+                                        <input class="uk-input uk-form-large" placeholder="Create Password" id="password" name="password" type="password">
+                                     </div>
+                                </div>
+                                <div class="uk-margin">
+                                    <div class="uk-inline uk-width-1-1">
+                                        <span class="uk-form-icon" uk-icon="icon: lock"></span>
+                                        <input class="uk-input uk-form-large" placeholder="Confirm Password" id="password2" name="password2" type="password">
                                     </div>
                                 </div>
                                 <div class="uk-margin">
                                     <button
-                                        class="uk-button uk-button-primary uk-button-large uk-width-1-1">Login</button>
+                                       class="uk-button uk-button-primary uk-button-large uk-width-1-1">Register</button>
                                 </div>
-                                <!--div class="uk-text-small uk-text-center">
-                                    Don't have account? Email <a href="mailto:omid.am88@gmail.com"> here</a>
-                                </div-->
-                                 <p>Create an account or login</p>
-                                    <a href="/users/register" class="uk-text-small uk-text-center">Register</a>
+                                                         
                             </form>
                         </div>
                     </div>

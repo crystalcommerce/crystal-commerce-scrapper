@@ -1,0 +1,9 @@
+{
+    "modules": [
+        {
+            "name" : "yugioh",
+            "alternative": null,
+            "fileName": "db.yugioh-card"
+        }
+    ]
+}
