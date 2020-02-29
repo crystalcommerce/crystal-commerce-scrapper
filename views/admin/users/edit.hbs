@@ -1,0 +1,33 @@
+<form action="/admin/users/edit/{{user.id}}?_method=PUT" method="post" enctype="multipart/form-data">
+<body>
+     <div class="uk-width-1-1">
+     <div class="uk-container">
+    <div class="uk-grid-margin uk-grid uk-grid-stack" uk-grid>
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input name="name" type="text" class="uk-input uk-form-medium" id="name" placeholder="Enter Name" value="{{user.name}}"
+               required>
+    </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input name="email"  class="uk-input uk-form-medium" id="email" value="{{user.email}}">
+    </div>
+    <div class="form-group">
+        <label for="role">Role</label>
+
+        <select name="role" id="role" class="uk-input uk-form-medium">
+         {{#select user.role}}
+                <option value="basic">Basic</option>
+                <option value="supervisor">Supervisor</option>
+                <option value="admin">Admin</option>
+            {{/select}}
+        </select>
+    </div>
+      <div class="uk-margin">
+    <button type="submit" class="uk-button uk-button-primary uk-button-medium ">Update User</button>
+    </div>
+    </div>
+    </div>
+    </div>
+</body>
+</form>

@@ -1,0 +1,24 @@
+<h1>
+   ALL Users
+</h1>
+
+<table class="table table-bordered">
+<thead>
+<tr>
+    <th>Name</th>
+     <th>Email</th>
+     <th>Role</th>
+</tr>
+</thead>
+
+    <tbody>
+    {{#each users}}
+    <tr>
+        <td>{{name}}</td>
+        <td>{{email}}</td>
+        <td>{{role}}</td>
+        <td><a href="users/edit/{{_id}}" class="btn btn-info">Edit</a></td>
+    </tr>
+    {{/each}}
+    </tbody>
+</table>

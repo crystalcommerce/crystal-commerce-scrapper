@@ -15,6 +15,14 @@ const userSchema=new mongoose.Schema({
     date:{
         type:Date,
         default:Date.now
+    },
+    role:{
+        type:String,
+        default:'basic',
+        enum:["basic","supervisor","admin"]
+    },
+    accessToken:{
+        type:String
     }
 });
 const User=mongoose.model('User',userSchema);

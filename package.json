@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "accesscontrol": "^2.2.1",
     "assert": "^2.0.0",
     "axios": "^0.19.1",
     "bcrypt": "^4.0.0",
@@ -27,10 +28,10 @@
     "dotenv": "^8.2.0",
     "ejs": "^3.0.1",
     "express": "^4.17.1",
-    "express-handlebars": "^3.1.0",
     "express-session": "^1.17.0",
     "https": "^1.0.0",
     "hubspot": "^2.3.7",
+    "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
     "mongodb": "^3.5.3",
     "mongoose": "^5.9.2",
@@ -48,6 +49,7 @@
     "@babel/cli": "^7.8.3",
     "@babel/core": "^7.8.3",
     "@babel/node": "^7.8.3",
-    "@babel/preset-env": "^7.8.3"
+    "@babel/preset-env": "^7.8.3",
+    "node-env-run": "^3.0.2"
   }
 }
