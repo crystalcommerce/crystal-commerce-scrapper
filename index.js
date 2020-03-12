@@ -65,7 +65,7 @@ app.set('views', './views');
 app.use(express.static('public'));
 
 const  users= require('./routes/admin/users');
-
+const scraps=require('./routes/admin/scraps')
 //app.use('/users', require('./routes/users.js'));
 
 app.get('/', (req, res) => res.render('index'));
@@ -79,8 +79,9 @@ app.get('/status', (req, res) => res.render('admin_home'));
 app.get('/logout', (req, res) => res.render('admin_home'));
 app.get('/register',(req,res)=>res.render('register'));
 app.get('/users',(req,res)=>res.render('users'))
-
+app.get('/scraps',(req,res)=>res.render('scraps'))
 app.use('/admin/users',users)
+app.use('/admin/scraps',scraps)
 
 ///
 
