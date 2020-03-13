@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const axios = require('axios');
+const cheerio = require('cheerio');
 
 var bodyParser = require('body-parser')
 
@@ -46,6 +48,21 @@ router.post('/edit/:id', (req, res) => {
       }).catch(err => res.status(400).send(`COULD NOT SAVE BECAUSE: ${err}`));
   });
 });
+router.get('/scrap/:id',(req,res)=>{
+  
+  Scrap.findById(req.params.id).lean().exec(function(error,scrap) {
+  console.log('before axios')
+    axios(scrap.url).then(response=>{
+  console.log('after axios')
+     const html=response.data;
+     const $=cheerio.load(html);
+     const statsTable=$('.statsTableContainer > tr');
+     console.log(statsTable.length);
+     console.log(statsTable.text)
+   })
+    })
+});
+
 
 
 router.get('/create',forwardAuthenticated,(req,res)=>{
