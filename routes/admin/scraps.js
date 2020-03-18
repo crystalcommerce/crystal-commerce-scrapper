@@ -15,6 +15,13 @@ const { forwardAuthenticated } = require('../../config/auth');
 
 const app=express();
 
+// router.all('/*', (req, res, next) => {
+//   // router.all('/*',userAuthenticated ,(req, res, next) => {
+//       req.app.locals.layout = 'index';
+     
+//       next();
+//   });
+
 router.get("/",(req,res)=>{
   
     Scrap.find({}).lean().exec(

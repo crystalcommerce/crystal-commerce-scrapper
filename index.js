@@ -2,7 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const http = require('http');
-const exphbs = require('express-handlebars');
+const path = require('path');
+const expressHbs = require('express-handlebars');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const session = require('express-session');
@@ -19,6 +20,12 @@ const { ensureAuthenticated, forwardAuthenticated } = require('./config/auth');
  const {select,generateDate,paginate} = require('./helpers/handlebars-helpers');
 const db = require('./config/keys').mongoURI;
 
+
+app.set('views', path.join(__dirname, 'views'));
+//console.log(path.join(__dirname, 'views'))
+
+app.engine('hbs', expressHbs({extname:'hbs', defaultLayout:'main',layoutsDir:__dirname + '/views/layouts', helpers: {select: select, generateDate: generateDate,paginate: paginate}}));
+app.set('view engine', 'hbs');
 
 mongoose
   .connect('mongodb://localhost:27017/exampleDb',
@@ -58,28 +65,25 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.engine('hbs', exphbs({extname: '.hbs', helpers: {select: select, generateDate: generateDate,paginate: paginate}}));
-
-app.set('view engine', 'hbs');
-app.set('views', './views');
 app.use(express.static('public'));
 
 const  users= require('./routes/admin/users');
 const scraps=require('./routes/admin/scraps')
 //app.use('/users', require('./routes/users.js'));
 
-app.get('/', (req, res) => res.render('index'));
-app.get('/dashboard',ensureAuthenticated, (req, res) =>
+ app.get('/', (req, res) => res.render('index'));
+app.get('/dashboard',(req, res) =>
 res.render('admin_home', {
   user: req.user
 }));
+//res.render('main', {layout : 'index'});
+
 app.get('/download', (req, res) => res.render('admin_home'));
 app.get('/add-new', (req, res) => res.render('admin_home'));
 app.get('/status', (req, res) => res.render('admin_home'));
 app.get('/logout', (req, res) => res.render('admin_home'));
 app.get('/register',(req,res)=>res.render('register'));
-app.get('/users',(req,res)=>res.render('users'))
-app.get('/scraps',(req,res)=>res.render('scraps'))
+
 app.use('/admin/users',users)
 app.use('/admin/scraps',scraps)
 

@@ -19,6 +19,7 @@ var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 
+
 router.get('/login', forwardAuthenticated, (req, res) =>
 { 
   console.log('login is start')
