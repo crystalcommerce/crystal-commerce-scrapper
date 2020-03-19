@@ -130,7 +130,7 @@ router.get('/',(req,res)=>{
   
    User.find({}).lean().exec(
    function(error,data){
-    res.render('users',{users:data})
+    res.render('users',{layout:'index',users:data})
    } 
    )
  })

@@ -1,0 +1,22 @@
+<form action="/admin/scraps/edit/{{scrap._id}}?_method=PUT" method="POST" >
+<body>
+     <div class="uk-width-1-1">
+     <div class="uk-container">
+    <div class="uk-grid-margin uk-grid uk-grid-stack" uk-grid>
+    <div class="form-group">
+        <label for="websitename">Website Name</label>
+        <input name="websitename" type="text" class="uk-input uk-form-medium" id="websitename" placeholder="Enter Websitename" value="{{scrap.websitename}}"
+               required>
+    </div>
+      <div class="form-group">
+        <label for="url">Url</label>
+        <input name="url"  class="uk-input uk-form-medium" id="url" value="{{scrap.url}}">
+    </div>
+      <div class="uk-margin">
+    <button type="submit" class="uk-button uk-button-primary uk-button-medium ">Update Scrap</button>
+    </div>
+    </div>
+    </div>
+    </div>
+</body>
+</form>

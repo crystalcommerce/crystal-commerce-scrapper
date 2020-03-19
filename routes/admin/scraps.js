@@ -24,9 +24,10 @@ const app=express();
 
 router.get("/",(req,res)=>{
   
+ 
     Scrap.find({}).lean().exec(
         function(error,data){
-            res.render('scraps',{scraps:data});
+            res.render('scraps',{layout:'index',scraps:data});
         }
     )
 })
@@ -34,7 +35,7 @@ router.get("/",(req,res)=>{
 router.get('/edit/:id', (req, res) => {
 
   Scrap.findById(req.params.id).lean().exec(function(error,scrap) {
-        res.render('admin/scraps/edit', {scrap: scrap});
+        res.render('scrapedit', {scrap: scrap});
       
 
   });
@@ -121,7 +122,7 @@ router.post('/create',(req,res)=>{
         });
         newScrap.save().then(scrap=>{
             req.flash('success_msg','You are create new scrap')
-            res.render('/admin/scraps')
+            res.render('/admin/scraps',{layout:'index',scraps:data})
         }).catch(err=>console.log(err))
 
       }

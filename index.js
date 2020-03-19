@@ -87,6 +87,13 @@ app.get('/register',(req,res)=>res.render('register'));
 app.use('/admin/users',users)
 app.use('/admin/scraps',scraps)
 
+
+// app.get('/', (req, res) => {
+  
+//   res.render('main', {layout : 'index'});
+//   });
+
+
 ///
 
 http.createServer(app).listen(port);
