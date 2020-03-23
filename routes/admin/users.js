@@ -30,7 +30,11 @@ router.get('/register', forwardAuthenticated, (req, res) => {
   console.log('register starting')
   res.render('register')
 });
-
+router.get('/delete/:id',(req,res)=>{
+  User.deleteOne({_id:req.params.id}).then((resd)=>{
+    res.redirect('/admin/users');
+  }).catch()
+})
 router.post('/register', (req, res) => {
   const { name, email, password, password2, role } = req.body;
   let errors = [];

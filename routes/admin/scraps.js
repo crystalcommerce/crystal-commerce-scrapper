@@ -78,7 +78,11 @@ router.get('/create', forwardAuthenticated, (req, res) => {
   res.render('admin/scraps/create', { layout: 'index' });
 })
 
-
+router.get('/delete/:id',(req,res)=>{
+  Scrap.deleteOne({_id:req.params.id}).then((resd)=>{
+    res.redirect('/admin/scraps');
+  }).catch()
+})
 
 router.post('/create', (req, res) => {
 
