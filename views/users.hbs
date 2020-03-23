@@ -1,24 +1,30 @@
-<h1>
-    Users
-</h1>
-
-<table class="table table-bordered">
-<thead>
-<tr>
-    <th>Name</th>
-     <th>Email</th>
-     <th>Role</th>
-</tr>
-</thead>
+<a class="btn btn-info" href="/admin/users/create/"><span uk-icon="plus"></span> Add new User </a>
+<table class="uk-table uk-table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+        </tr>
+    </thead>
 
     <tbody>
-    {{#each users}}
-    <tr>
-        <td>{{name}}</td>
-        <td>{{email}}</td>
-        <td>{{role}}</td>
-        <td><a href="users/edit/{{_id}}" class="btn btn-info">Edit</a></td>
-    </tr>
-    {{/each}}
+        {{#each users}}
+        <tr>
+            <td>{{name}}</td>
+            <td>{{email}}</td>
+            <td>{{role}}</td>
+            <td>
+                <a class="btn btn-info" href="users/edit/{{_id}}">
+                    <span uk-icon="file-edit"></span>
+                </a>
+                <a class="btn btn-info" href="users/edit/{{_id}}">
+                    <span uk-icon="trash"></span>
+                </a>
+            </td>
+        </tr>
+        {{/each}}
     </tbody>
+
+    
 </table>

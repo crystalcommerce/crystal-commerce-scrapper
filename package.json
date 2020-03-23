@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
     "server": "babel-node index.js",
-    "dev": "NODE_ENV=development npm-run-all server"
+    "dev": "nodemon NODE_ENV=development npm-run-all server"
   },
   "author": "Omid Amiri",
   "license": "ISC",

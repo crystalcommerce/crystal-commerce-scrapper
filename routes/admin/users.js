@@ -20,20 +20,19 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 
 
-router.get('/login', forwardAuthenticated, (req, res) =>
-{ 
+router.get('/login', forwardAuthenticated, (req, res) => {
   console.log('login is start')
   res.render('index')
 });
 
 
 router.get('/register', forwardAuthenticated, (req, res) => {
-  console.log('register starting')  
+  console.log('register starting')
   res.render('register')
 });
 
 router.post('/register', (req, res) => {
-  const { name, email, password, password2,role } = req.body;
+  const { name, email, password, password2, role } = req.body;
   let errors = [];
 
   if (!name || !email || !password || !password2) {
@@ -73,15 +72,15 @@ router.post('/register', (req, res) => {
           email,
           password
         });
-        newUser.role=role||"basic";
- 
-        const accessToken=jwt.sign({userId:newUser._id},process.env.JWT_KEY,{
-          expiresIn:"1d"
+        newUser.role = role || "basic";
+
+        const accessToken = jwt.sign({ userId: newUser._id }, process.env.JWT_KEY, {
+          expiresIn: "1d"
         });
-        newUser.accessToken=accessToken;
+        newUser.accessToken = accessToken;
         bcrypt.genSalt(10, (err, salt) => {
           bcrypt.hash(newUser.password, salt, (err, hash) => {
-             
+
             if (err) throw err;
             newUser.password = hash;
             newUser
@@ -91,7 +90,7 @@ router.post('/register', (req, res) => {
                   'success_msg',
                   'You are now registered and can log in'
                 );
-               
+
                 res.redirect('../users/login');
               })
               .catch(err => console.log(err));
@@ -103,9 +102,9 @@ router.post('/register', (req, res) => {
 });
 // Login
 
-router.post('/login',urlencodedParser, (req, res, next) => {
-  
-  
+router.post('/login', urlencodedParser, (req, res, next) => {
+
+
   passport.authenticate('local', {
     successRedirect: '/dashboard',
     failureRedirect: '../users/login',
@@ -126,110 +125,112 @@ router.get('/logout', (req, res) => {
 
 
 
-router.get('/',(req,res)=>{
-  
-   User.find({}).lean().exec(
-   function(error,data){
-    res.render('users',{layout:'index',users:data})
-   } 
-   )
- })
+router.get('/', (req, res) => {
 
- router.get('/edit/:id', (req, res) => {
+  User.find({}).lean().exec(
+    function (error, data) {
+      res.render('users', { layout: 'index', users: data })
+    }
+  );
+})
 
-  User.findById(req.params.id).lean().exec(function(error,user) {
-        res.render('admin/users/edit', {user: user});
-      
+router.get('/edit/:id', (req, res) => {
+
+  User.findById(req.params.id).lean().exec(function (error, user) {
+    res.render('admin/users/edit', { layout: 'index', user: user });
+
 
   });
 
 });
 
-router.get('/create',(req,res)=>{
-  res.render('admin/users/create');
+router.get('/create', (req, res) => {
+  res.render('admin/users/create',{ 
+    layout: 'index' 
+  });
 });
 
 router.post('/edit/:id', (req, res) => {
-  
+
   const id = req.params.id;
   User.findById(id).then(user => {
-      user.name = req.body.name;
-      user.email = req.body.email;
-      user.role = req.body.role;
-     
+    user.name = req.body.name;
+    user.email = req.body.email;
+    user.role = req.body.role;
 
-      user.save().then(updatedUser => {
-          req.flash('success_message', `${updatedUser.email} was Updated Successfully`);
-          res.redirect('/admin/users');
-      }).catch(err => res.status(400).send(`COULD NOT SAVE BECAUSE: ${err}`));
+
+    user.save().then(updatedUser => {
+      req.flash('success_message', `${updatedUser.email} was Updated Successfully`);
+      res.redirect('/admin/users');
+    }).catch(err => res.status(400).send(`COULD NOT SAVE BECAUSE: ${err}`));
   });
 });
 
 router.post('/create', (req, res) => {
- 
+
   const { name, email, role } = req.body;
   let errors = [];
 
-  if (!name || !email ) {
+  if (!name || !email) {
     errors.push({ msg: 'Please enter all fields' });
   }
 
- 
+
 
   if (errors.length > 0) {
     res.render('admin/users/create', {
       errors,
       name,
       email,
-     
+
     });
-  } 
+  }
   else {
-  User.findOne({email:req.body.email}).then(user => {
-    
-   
-     if (user) {
-      errors.push({ msg: 'Email already exists' });
-      res.render('admin/users/create', {
-        errors,
-        name,
-        email,
-       role
-      });
-    } else {
-       password="123";
-      const newUser = new User({
-        name,
-        email,
-        password,
-        role
-      });
-      newUser.role=role||"basic";
- 
-      const accessToken=jwt.sign({userId:newUser._id},process.env.JWT_KEY,{
-        expiresIn:"1d"
-      });
-      newUser.accessToken=accessToken;
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(newUser.password, salt, (err, hash) => {
-           
-          if (err) throw err;
-          newUser.password = hash;
-          newUser
-            .save()
-            .then(user => {
-              req.flash(
-                'success_msg',
-                'You are now registered and can log in'
-              );
-             
-              res.redirect('/admin/users');
-            })
-            .catch(err => console.log(err));
+    User.findOne({ email: req.body.email }).then(user => {
+
+
+      if (user) {
+        errors.push({ msg: 'Email already exists' });
+        res.render('admin/users/create', {
+          errors,
+          name,
+          email,
+          role
         });
-      });
-    }
-  });
+      } else {
+        password = "123";
+        const newUser = new User({
+          name,
+          email,
+          password,
+          role
+        });
+        newUser.role = role || "basic";
+
+        const accessToken = jwt.sign({ userId: newUser._id }, process.env.JWT_KEY, {
+          expiresIn: "1d"
+        });
+        newUser.accessToken = accessToken;
+        bcrypt.genSalt(10, (err, salt) => {
+          bcrypt.hash(newUser.password, salt, (err, hash) => {
+
+            if (err) throw err;
+            newUser.password = hash;
+            newUser
+              .save()
+              .then(user => {
+                req.flash(
+                  'success_msg',
+                  'You are now registered and can log in'
+                );
+
+                res.redirect('/admin/users');
+              })
+              .catch(err => console.log(err));
+          });
+        });
+      }
+    });
   }
 });
 

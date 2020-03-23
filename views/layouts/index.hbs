@@ -11,99 +11,77 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.3/css/uikit.min.css" />
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <link rel="stylesheet" href="../css/style.css" />
-    <link rel="stylesheet" href="../css/notyf.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/notyf.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"
         integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-    <script src="../js/uikit.min.js"></script>
-    <script src="../js/uikit-icons.min.js"></script>
+    <script src="/js/uikit.min.js"></script>
+    <script src="/js/uikit-icons.min.js"></script>
 
 </head>
-<div id="sidebar" class="tm-sidebar-left uk-background-default">
-    <ul class="uk-nav uk-nav-default">
-        <li class="uk-nav-header">
-            <a href="status">Status</a>
-        </li>
-        <li class="uk-nav-header">
-            <a href="/admin/scraps">Scraps</a>
-        </li>
-         <li class="uk-nav-header">
-            <a href="/admin/scraps/create/">Create New Scrap</a>
-        </li>
-       
-        <li class="uk-nav-header">
-            <a href="status">Download Files</a>
-        </li>
-         <li class="uk-nav-header">
-            <a href="/admin/users">Users</a>
-        </li>
-        <li class="uk-nav-header">
-            <a href="/admin/users/create/">Create New User</a>
-        </li>
-        <li class="uk-nav-header">
-            <a href="/admin/users/logout">Logout</a>
-        </li>
-
-
-    </ul>
-</div>
-     <div uk-sticky class="uk-navbar-container tm-navbar-container uk-active">
-    <div class="uk-container uk-container-expand">
-        <nav uk-navbar>
-            <div class="uk-navbar-left">
-                <a id="sidebar_toggle" class="uk-navbar-toggle" uk-navbar-toggle-icon></a>
-                <a href="#" class="uk-navbar-item uk-logo">
-                    Scraper Admin Page
-                </a>
-            </div>
-            <div class="uk-navbar-right uk-light">
-                <ul class="uk-navbar-nav">
-                    <li class="uk-active">
-                        <div uk-dropdown="pos: bottom-right; mode: click; offset: -17;">
-                            <ul class="uk-nav uk-navbar-dropdown-nav">
-                                <li class="uk-nav-header">Options</li>
-                                <li><a href="#">Edit Profile</a></li>
-                                <li class="uk-nav-header">Actions</li>
-                                <li><a href="#">Lock</a></li>
-                                <li><a href="/admin/users/logout">Logout</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </div>
-</div>
-
 
 <body>
-    <div class="content-padder content-background">
-    <!--div class="uk-section-small uk-section-default header">
-        <div class="uk-container uk-container-large">
-            <h1><span class="ion-speedometer"></span> Scraper Dashboard</h1>
-            <ul class="uk-breadcrumb">
-                <li><span href="">Home</span></li>
-            </ul>
-        </div>
-    </div-->
-    <!--div class="uk-section"-->
-        <!--div class="uk-container uk-container-large"-->
-            <!--div uk-grid class="uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-4@xl"-->
-                
-                <div>
-                    <div class="uk-card uk-card-default uk-card-body">
-                      {{{body}}}
-                    </div>
+    <div id="sidebar" class="tm-sidebar-left uk-background-default">
+        <ul class="uk-nav uk-nav-default">
+            <li class="uk-nav-header">
+                <a href="status">Status</a>
+            </li>
+            <li class="uk-nav-header">
+                <a href="/admin/scraps">Websites</a>
+            </li>
+
+            <li class="uk-nav-header">
+                <a href="status">Download Files</a>
+            </li>
+            <li class="uk-nav-header">
+                <a href="/admin/users">Users</a>
+            </li>
+            <li class="uk-nav-header">
+                <a href="/admin/users/logout">Logout</a>
+            </li>
+
+
+        </ul>
+    </div>
+    <div uk-sticky class="uk-navbar-container tm-navbar-container uk-active">
+        <div class="uk-container uk-container-expand">
+            <nav uk-navbar>
+                <div class="uk-navbar-left">
+                    <a id="sidebar_toggle" class="uk-navbar-toggle" uk-navbar-toggle-icon></a>
+                    <a href="#" class="uk-navbar-item uk-logo">
+                        Scraper Admin Page
+                    </a>
                 </div>
-           
-        <!--/div-->
-    <!--/div>   
+                <div class="uk-navbar-right uk-light">
+                    <ul class="uk-navbar-nav">
+                        <li class="uk-active">
+                            <div uk-dropdown="pos: bottom-right; mode: click; offset: -17;">
+                                <ul class="uk-nav uk-navbar-dropdown-nav">
+                                    <li class="uk-nav-header">Options</li>
+                                    <li><a href="#">Edit Profile</a></li>
+                                    <li class="uk-nav-header">Actions</li>
+                                    <li><a href="#">Lock</a></li>
+                                    <li><a href="/admin/users/logout">Logout</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div class="content-padder content-background">
+        <div>
+            <div class="uk-card uk-card-default uk-card-body">
+                {{{body}}}
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"
         integrity="sha256-UGwvyUFH6Qqn0PSyQVw4q3vIX0wV1miKTracNJzAWPc=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.transit/0.9.12/jquery.transit.min.js"
         integrity="sha256-rqEXy4JTnKZom8mLVQpvni3QHbynfjPmPxQVsPZgmJY=" crossorigin="anonymous"></script>
-        </div>
 </body>
-
 </html>
