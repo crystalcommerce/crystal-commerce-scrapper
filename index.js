@@ -9,6 +9,9 @@ const passport = require('passport');
 const session = require('express-session');
 const mongoose=require('mongoose')
 const flash = require('connect-flash');
+const User = require("./model/User");
+
+
 require("dotenv").config();
 
 const app = express()
@@ -28,7 +31,7 @@ app.engine('hbs', expressHbs({extname:'hbs', defaultLayout:'main',layoutsDir:__d
 app.set('view engine', 'hbs');
 
 mongoose
-  .connect('mongodb://localhost:27017/exampleDb',
+  .connect('mongodb://localhost:27017/cc',
     { useNewUrlParser: true }
   )
   .then(() => console.log('MongoDB Connected'))
@@ -87,13 +90,7 @@ app.get('/register',(req,res)=>res.render('register'));
 app.use('/admin/users',users)
 app.use('/admin/scraps',scraps)
 
+///check if admin user exists and create it.
 
-// app.get('/', (req, res) => {
-  
-//   res.render('main', {layout : 'index'});
-//   });
-
-
-///
 
 http.createServer(app).listen(port);
