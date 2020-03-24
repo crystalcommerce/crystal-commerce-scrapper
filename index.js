@@ -13,7 +13,7 @@ const User = require("./model/User");
 
 
 require("dotenv").config();
-const User = require('./models/User');
+// const User = require('./models/User');
 const app = express()
 const port = 3000;
 const { ensureAuthenticated, forwardAuthenticated } = require('./config/auth');

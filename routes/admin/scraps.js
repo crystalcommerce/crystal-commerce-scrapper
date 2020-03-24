@@ -67,7 +67,10 @@ router.get('/scrap/:id', (req, res) => {
 
 
 router.get('/view/:id', (req, res)=>{
-  res.send("omidomid");
+  ///res.send("omidomid");
+  Scrap.findById(req.params.id).lean().exec(function (error, scrap) {
+    res.render('admin/scraps/view', { layout: 'index', scrap: scrap });
+  });
 });
 
 
