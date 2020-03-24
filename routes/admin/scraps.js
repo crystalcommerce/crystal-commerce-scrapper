@@ -23,8 +23,6 @@ const app = express();
 //   });
 
 router.get("/", (req, res) => {
-
-
   Scrap.find({}).lean().exec(
     function (error, data) {
       res.render('scraps', { layout: 'index', scraps: data });
@@ -73,8 +71,7 @@ router.get('/view/:id', (req, res)=>{
 });
 
 
-router.get('/create', forwardAuthenticated, (req, res) => {
-  console.log('create is fire')
+router.get('/create', (req, res) => {
   res.render('admin/scraps/create', { layout: 'index' });
 })
 
@@ -126,8 +123,8 @@ router.post('/create', (req, res) => {
           url,
         });
         newScrap.save().then(scrap => {
-          req.flash('success_msg', 'You are create new scrap')
-          res.render('scraps', { layout: 'index', scraps: scrap })
+          //req.flash('success_msg', 'You are create new scrap')
+          res.redirect('/admin/scraps');
         }).catch(err => console.log(err))
       }
     });
