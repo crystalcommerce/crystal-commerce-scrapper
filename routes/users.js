@@ -22,7 +22,22 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 router.get('/login', forwardAuthenticated, (req, res) => res.render('index'));
 
 
-router.get('/register', forwardAuthenticated, (req, res) => res.render('register'));
+router.get('/register', (req, res) => {
+  console.log('jskjkjkjkjkjkjkjkj')
+  User.findOne({role:'admin'}).then(usr=>{
+    if(usr!==undefined&&usr!==null){
+      
+      res.render('index');
+
+    }
+    else{
+      console.log('register starting')
+       res.render('register')
+    }
+  })
+  
+  
+});
 
 router.post('/register', (req, res) => {
   const { name, email, password, password2 } = req.body;

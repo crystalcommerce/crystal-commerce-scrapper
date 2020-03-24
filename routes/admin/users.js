@@ -26,9 +26,19 @@ router.get('/login', forwardAuthenticated, (req, res) => {
 });
 
 
-router.get('/register', forwardAuthenticated, (req, res) => {
-  console.log('register starting')
-  res.render('register')
+router.get('/register',  (req, res) => {
+console.log('start register')
+  User.findOne({role:'admin'}).then(usr=>{
+    if(usr!==undefined&&usr!==null){
+      res.render('index');
+
+    }
+    else{
+      console.log('register starting')
+       res.render('register')
+    }
+  })
+  
 });
 router.get('/delete/:id',(req,res)=>{
   User.deleteOne({_id:req.params.id}).then((resd)=>{
@@ -38,7 +48,7 @@ router.get('/delete/:id',(req,res)=>{
 router.post('/register', (req, res) => {
   const { name, email, password, password2, role } = req.body;
   let errors = [];
-
+ 
   if (!name || !email || !password || !password2) {
     errors.push({ msg: 'Please enter all fields' });
   }
@@ -76,7 +86,7 @@ router.post('/register', (req, res) => {
           email,
           password
         });
-        newUser.role = role || "basic";
+        newUser.role = "admin";
 
         const accessToken = jwt.sign({ userId: newUser._id }, process.env.JWT_KEY, {
           expiresIn: "1d"
@@ -149,6 +159,7 @@ router.get('/edit/:id', (req, res) => {
 });
 
 router.get('/create', (req, res) => {
+  console.log('dkjkjkjdkj')
   res.render('admin/users/create',{ 
     layout: 'index' 
   });

@@ -10,7 +10,7 @@ const session = require('express-session');
 const mongoose=require('mongoose')
 const flash = require('connect-flash');
 require("dotenv").config();
-
+const User = require('./models/User');
 const app = express()
 const port = 3000;
 const { ensureAuthenticated, forwardAuthenticated } = require('./config/auth');
@@ -82,7 +82,20 @@ app.get('/download', (req, res) => res.render('admin_home'));
 app.get('/add-new', (req, res) => res.render('admin_home'));
 app.get('/status', (req, res) => res.render('admin_home'));
 app.get('/logout', (req, res) => res.render('admin_home'));
-app.get('/register',(req,res)=>res.render('register'));
+
+app.get('/register',(req,res)=>{
+  
+  User.findOne({role:'admin'}).then(usr=>{
+    if(usr!==undefined&&usr!==null){
+      res.render('index');
+
+    }
+    else{
+      console.log('register starting')
+       res.render('register')
+    }
+  })
+});
 
 app.use('/admin/users',users)
 app.use('/admin/scraps',scraps)
