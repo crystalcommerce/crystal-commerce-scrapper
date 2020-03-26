@@ -23,10 +23,12 @@ var job = new CronJob('* * * * *', async function () {
         if(comp===0){
          console.log('same time and should do',comp)
          s.lastDoneDate.setTime(s.lastDoneDate.getTime()+s.everyMinute*60000);
+         s.save();
         }
         else if(comp<0){
             console.log('last done date is passed and should do',comp)
             s.lastDoneDate.setTime(d.getTime()+s.everyMinute*60000);
+            s.save()
         }
         else{
            console.log('date earlier',comp)
