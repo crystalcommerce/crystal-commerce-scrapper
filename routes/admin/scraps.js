@@ -9,6 +9,18 @@ var bodyParser = require('body-parser')
 const passport = require('passport');
 
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now())
+  }
+})
+ 
+var upload = multer({ storage: storage })
+
 
 const Scrap = require('../../models/Scrap');
 const { forwardAuthenticated } = require('../../config/auth');
@@ -84,7 +96,11 @@ router.get('/delete/:id',(req,res)=>{
   }).catch()
 })
 
-router.post('/create', (req, res) => {
+router.post('/create', upload.single('jsFile'), (req, res) => {
+  const file = req.file
+  console.log(file);
+  res.send(file);
+  return;
 
   const { websitename, url } = req.body;
   let errors = [];

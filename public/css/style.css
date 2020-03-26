@@ -125,3 +125,7 @@ html, body{
  background-color: #d1eefe;
  color: #1e87f0;
 }
+
+.website-page-icon{
+    cursor: pointer;
+}

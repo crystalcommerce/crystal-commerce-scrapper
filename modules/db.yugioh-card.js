@@ -11,6 +11,7 @@ export default class Yugioh {
     config = {
         url: "https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=1&sess=1&pid=14415003&rp=99999",
         base_url: 'https://www.db.yugioh-card.com',
+        onProgress: ()=>{}, 
         csvHeader: [
             { id: 'id', title: 'Product Id' },
             { id: 'img', title: 'Product Image' },
@@ -23,6 +24,8 @@ export default class Yugioh {
             { id: 'passcode', title: 'Passcode' }
         ]
     };
+
+    
     constructor() {
         this.init();
     }
@@ -49,6 +52,7 @@ export default class Yugioh {
             let item = await this.loadPageData(this.data[i]);
             if(this.onNewItem) this.onNewItem(item);
             this.data[i] = item;
+            if(this.config.onProgress) this.config.onProgress(item, (i / this.data.length) );
         }
 
         return this.data;

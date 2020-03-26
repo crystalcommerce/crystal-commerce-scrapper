@@ -10,7 +10,8 @@ const session = require('express-session');
 const mongoose=require('mongoose')
 const flash = require('connect-flash');
 const User = require("./model/User");
-
+const scheduler = require('./helpers/scrapper-scheduler');
+ 
 
 require("dotenv").config();
 // const User = require('./models/User');
@@ -107,3 +108,6 @@ app.use('/admin/scraps',scraps)
 
 
 http.createServer(app).listen(port);
+
+
+///add corn jobs for run scrappers

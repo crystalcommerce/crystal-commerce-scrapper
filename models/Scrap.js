@@ -7,6 +7,10 @@ const scrapSchema=new mongoose.Schema({
     url:{
         type:String,
         required:true
+    }, 
+    jsFilePath: {
+        type: String,
+        required: false
     }
 })
 
