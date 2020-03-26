@@ -31,6 +31,7 @@ var job = new CronJob('* * * * *', async function () {
             s.save()
         }
         else{
+            
            console.log('date earlier',comp)
            continue;
         }
