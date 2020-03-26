@@ -1,4 +1,4 @@
-import Scrap from '../models/Scrap';
+const Scrap= require('../models/Scrap');
 
 
 let runningScrapper = [];
@@ -18,9 +18,20 @@ var job = new CronJob('* * * * *', async function () {
         let rss = runningScrapper.filter(rs => rs.config.id == id);
 
         if (rss.length != 0) continue;
-
-        ///reqiore
-
+        var d=new Date();
+        var comp= s.lastDoneDate-d;
+        if(comp===0){
+         console.log('same time and should do',comp)
+         s.lastDoneDate.setTime(s.lastDoneDate.getTime()+s.everyMinute*60000);
+        }
+        else if(comp<0){
+            console.log('last done date is passed and should do',comp)
+            s.lastDoneDate.setTime(d.getTime()+s.everyMinute*60000);
+        }
+        else{
+           console.log('date earlier',comp)
+           continue;
+        }
         rss[id] = s;
         console.log("rrrrr");
     }

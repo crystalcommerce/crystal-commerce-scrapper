@@ -11,6 +11,14 @@ const scrapSchema=new mongoose.Schema({
     jsFilePath: {
         type: String,
         required: false
+    },
+    everyMinute:{
+        type:Number,
+        default:2
+    },
+    lastDoneDate:{
+        type:Date,
+        default:Date.now
     }
 })
 
