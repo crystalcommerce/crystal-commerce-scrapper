@@ -1,5 +1,6 @@
 const Scrap= require('../models/Scrap');
-
+var vm = require("vm");
+var fs = require("fs");
 
 let runningScrapper = [];
 
@@ -27,29 +28,33 @@ var job = new CronJob('* * * * *', async function () {
         if (rss.length != 0) continue;
         var d=new Date();
     
-       
+        
        var comp= diff_minutes(d,s.lastDoneDate);
-        console.log('date time is ',d)
-        console.log('last done ',s.lastDoneDate)
-        console.log('compare is ',comp)
-        if(comp===0){
+       var modulepath='';
+        if(comp===0 || comp>0 ){
          console.log('same time and should do',comp)
          s.lastDoneDate.setTime(s.lastDoneDate.getTime()+s.everyMinute*60000);
+         
          Scrap.findOne({ _id: s.id }, function (err, doc){
-            doc.lastDoneDate =s.lastDoneDate.getTime()+(s.everyMinute*60000);
-            
-            doc.save();
+        if(comp===0){
+              doc.lastDoneDate =s.lastDoneDate.getTime()+(s.everyMinute*60000);
+            }
+            else{
+              doc.lastDoneDate =d.getTime()+(s.everyMinute*60000);
+            }
+       
+            modulepath=s.jsFilePath;
+           if(modulepath!==null&&modulepath!==undefined){
+              console.log(modulepath)
+              var data = fs.readFileSync(modulepath);
+              const script = new vm.Script(data);
+              script.runInThisContext();
+              console.log('run is done')
+           }
+          
+          doc.save();
           });
          
-        }
-        else if(comp>0){
-            console.log('last done date is passed and should do',comp)
-            s.lastDoneDate.setTime(d.getTime()+s.everyMinute*60000);
-            Scrap.findOne({ _id: s.id }, function (err, doc){
-                doc.lastDoneDate =d.getTime()+(s.everyMinute*60000);
-                
-                doc.save();
-              });
         }
         else{
 

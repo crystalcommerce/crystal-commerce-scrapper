@@ -96,7 +96,7 @@ router.get('/delete/:id',(req,res)=>{
   })
  
   Scrap.deleteOne({_id:req.params.id}).then((resd)=>{
-    console.log(fileName)
+   
     fs.unlinkSync(fileName)
     res.redirect('/admin/scraps');
   }).catch()
