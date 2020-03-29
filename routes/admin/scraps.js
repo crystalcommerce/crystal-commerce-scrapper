@@ -7,7 +7,7 @@ const cheerio = require('cheerio');
 var bodyParser = require('body-parser')
 
 const passport = require('passport');
-
+var fs = require('fs');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 var filePath= 'modules/'
@@ -89,10 +89,21 @@ router.get('/create', (req, res) => {
 })
 
 router.get('/delete/:id',(req,res)=>{
+  var fileName=''
+  Scrap.findOne({ _id: req.params.id}).then(scrap=>{
+    console.log(scrap)
+    fileName=scrap.jsFilePath;
+  })
+ 
   Scrap.deleteOne({_id:req.params.id}).then((resd)=>{
+    console.log(fileName)
+    fs.unlinkSync(fileName)
     res.redirect('/admin/scraps');
   }).catch()
-})
+
+}
+)
+
 
 router.post('/create',upload.single('jsFile') , (req, res) => {
   
@@ -141,7 +152,7 @@ router.post('/create',upload.single('jsFile') , (req, res) => {
         });
         newScrap.jsFilePath=file.path;
         newScrap.save().then(scrap => {
-          //req.flash('success_msg', 'You are create new scrap')
+        
           res.redirect('/admin/scraps');
         }).catch(err => console.log(err))
       }
