@@ -10,11 +10,12 @@ const passport = require('passport');
 
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
+var filePath= 'modules/'
 var storage = multer.diskStorage({
   
   destination: function (req, file, cb) {
       
-       cb(null, 'modules/')
+       cb(null,filePath)
   },
   filename: function (req, file, cb) {
  
@@ -96,11 +97,8 @@ router.get('/delete/:id',(req,res)=>{
 router.post('/create',upload.single('jsFile') , (req, res) => {
   
   const file = req.file
-
   
-   res.send(file);
-  return;
-
+  
   const { websitename, url } = req.body;
   let errors = [];
 
@@ -139,7 +137,9 @@ router.post('/create',upload.single('jsFile') , (req, res) => {
         const newScrap = new Scrap({
           websitename,
           url,
+        
         });
+        newScrap.jsFilePath=file.path;
         newScrap.save().then(scrap => {
           //req.flash('success_msg', 'You are create new scrap')
           res.redirect('/admin/scraps');
