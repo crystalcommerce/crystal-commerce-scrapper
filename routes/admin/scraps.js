@@ -11,11 +11,14 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 var storage = multer.diskStorage({
+  
   destination: function (req, file, cb) {
-    cb(null, 'uploads')
+      
+       cb(null, 'modules/')
   },
   filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now())
+ 
+    cb(null, file.originalname + '-' + Date.now()+'.js')
   }
 })
  
@@ -27,12 +30,6 @@ const { forwardAuthenticated } = require('../../config/auth');
 
 const app = express();
 
-// router.all('/*', (req, res, next) => {
-//   // router.all('/*',userAuthenticated ,(req, res, next) => {
-//       req.app.locals.layout = 'index';
-
-//       next();
-//   });
 
 router.get("/", (req, res) => {
   Scrap.find({}).lean().exec(
@@ -96,10 +93,12 @@ router.get('/delete/:id',(req,res)=>{
   }).catch()
 })
 
-router.post('/create', upload.single('jsFile'), (req, res) => {
+router.post('/create',upload.single('jsFile') , (req, res) => {
+  
   const file = req.file
-  console.log(file);
-  res.send(file);
+
+  
+   res.send(file);
   return;
 
   const { websitename, url } = req.body;
