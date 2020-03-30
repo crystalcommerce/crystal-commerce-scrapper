@@ -24,6 +24,16 @@ var job = new CronJob('* * * * *', async function () {
          console.log('same time and should do',comp)
          s.lastDoneDate.setTime(s.lastDoneDate.getTime()+s.everyMinute*60000);
          s.save();
+
+         //////////
+         var S = require(s.jsFilePath);
+         s1 = new S();
+         s1.id = s.id;
+         runningScrapper[s1.id] = s1;
+         s1.start((data)=>{
+             //data ba id
+             //time stamp 
+         })
         }
         else if(comp<0){
             console.log('last done date is passed and should do',comp)

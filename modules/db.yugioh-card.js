@@ -39,7 +39,7 @@ export default class Yugioh {
         return browser;
     }
 
-    async start() {
+    async start(onfinish) {
         ///get urls
         if (!this.browser) await this.init();
         this.pagesLinks = await this.extactPagesLinks();
@@ -55,6 +55,8 @@ export default class Yugioh {
             if(this.config.onProgress) this.config.onProgress(item, (i / this.data.length) );
         }
 
+        if(onfinish) onfinish(this.data);
+        this.close();
         return this.data;
     }
 

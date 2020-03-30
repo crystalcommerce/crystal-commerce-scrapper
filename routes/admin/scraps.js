@@ -97,10 +97,12 @@ router.get('/delete/:id',(req,res)=>{
 })
 
 router.post('/create', upload.single('jsFile'), (req, res) => {
-  const file = req.file
-  console.log(file);
-  res.send(file);
-  return;
+  // const file = req.file
+  // console.log(file);
+  // res.send(file);
+  // return;
+  //path
+  
 
   const { websitename, url } = req.body;
   let errors = [];
