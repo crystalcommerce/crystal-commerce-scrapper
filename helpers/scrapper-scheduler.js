@@ -1,4 +1,5 @@
 const Scrap = require('../models/Scrap');
+const ScrapData=require('../models/ScrapData');
 var vm = require("vm");
 var fs = require("fs");
 var path = require('path');
@@ -46,7 +47,10 @@ var job = new CronJob('* * * * *', async function () {
 
                 modulepath = s.jsFilePath;
                 if (modulepath !== null && modulepath !== undefined) {
-                    let Module = require(path.join(appDir, modulepath));
+                 
+                    
+                  let Module = require(path.join(appDir, modulepath));
+                  console.log('before module new')
                     let module = new Module();
                     scrapers[doc._id] = module;
                     module.start((data)=> {
@@ -54,6 +58,10 @@ var job = new CronJob('* * * * *', async function () {
                         //it json file, 
                         //put it into db let call it scrapData 
                         //id- scrapid - {{data}} - date
+                       var scrapData = new ScrapData({ scrapId:doc._id,resultData:data,createdDate:Date.now });
+                         scrapData.save(function (err) {
+                               if (err) console.log(err)
+                             });
                     });
                 }
 
