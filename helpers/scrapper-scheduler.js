@@ -17,7 +17,7 @@ function diff_minutes(dt2, dt1) {
 var CronJob = require('cron').CronJob;
 var job = new CronJob('* * * * *', async function () {
 
-    return;
+    // return;
     
     /// get scrap ///
     let scrapers = await Scrap.find();
@@ -50,8 +50,11 @@ var job = new CronJob('* * * * *', async function () {
                     let module = new Module();
                     scrapers[doc._id] = module;
                     module.start((data)=> {
-                        console.log(data);
-                    })
+                        //console.log(data);
+                        //it json file, 
+                        //put it into db let call it scrapData 
+                        //id- scrapid - {{data}} - date
+                    });
                 }
 
                 doc.save();
