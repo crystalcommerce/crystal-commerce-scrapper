@@ -46,7 +46,8 @@
     "puppeteer": "^2.1.1",
     "request-promise": "^4.2.5",
     "tingodb": "^0.6.1",
-    "uikit": "^3.3.2"
+    "uikit": "^3.3.2",
+    "uuid": "^7.0.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.3",

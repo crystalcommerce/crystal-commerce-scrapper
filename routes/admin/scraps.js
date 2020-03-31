@@ -4,13 +4,18 @@ const bcrypt = require('bcryptjs');
 const axios = require('axios');
 const cheerio = require('cheerio');
 
+var uuid = require('uuid');
+
 var bodyParser = require('body-parser')
 
 const passport = require('passport');
 var fs = require('fs');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
-var filePath = 'modules/'
+
+var filePath = 'uploads/'
+
+
 var storage = multer.diskStorage({
 
   destination: function (req, file, cb) {
@@ -18,8 +23,8 @@ var storage = multer.diskStorage({
     cb(null, filePath)
   },
   filename: function (req, file, cb) {
-
-    cb(null, file.originalname + '-' + Date.now() + '.js')
+    //console.log(file);
+    cb(null, uuid.v1() + "-" + file.originalname)
   }
 })
 
@@ -108,9 +113,10 @@ router.get('/delete/:id', (req, res) => {
 router.post('/create', upload.single('jsFile'), (req, res) => {
 
   const file = req.file
+  
+  console.log("file =>", req.file);
 
-
-  const { websitename, url } = req.body;
+  const { websitename, url, everyMinute } = req.body;
   let errors = [];
 
   if (!websitename || websitename === null) {
@@ -144,15 +150,13 @@ router.post('/create', upload.single('jsFile'), (req, res) => {
 
         });
       } else {
-
         const newScrap = new Scrap({
           websitename,
           url,
-
+          everyMinute
         });
         newScrap.jsFilePath = file.path;
         newScrap.save().then(scrap => {
-
           res.redirect('/admin/scraps');
         }).catch(err => console.log(err))
       }
