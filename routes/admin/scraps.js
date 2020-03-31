@@ -7,18 +7,22 @@ const cheerio = require('cheerio');
 var bodyParser = require('body-parser')
 
 const passport = require('passport');
-
+var fs = require('fs');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
+var filePath = 'modules/'
 var storage = multer.diskStorage({
+
   destination: function (req, file, cb) {
-    cb(null, 'uploads')
+
+    cb(null, filePath)
   },
   filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now())
+
+    cb(null, file.originalname + '-' + Date.now() + '.js')
   }
 })
- 
+
 var upload = multer({ storage: storage })
 
 
@@ -27,12 +31,6 @@ const { forwardAuthenticated } = require('../../config/auth');
 
 const app = express();
 
-// router.all('/*', (req, res, next) => {
-//   // router.all('/*',userAuthenticated ,(req, res, next) => {
-//       req.app.locals.layout = 'index';
-
-//       next();
-//   });
 
 router.get("/", (req, res) => {
   Scrap.find({}).lean().exec(
@@ -78,7 +76,7 @@ router.get('/scrap/:id', (req, res) => {
 });
 
 
-router.get('/view/:id', (req, res)=>{
+router.get('/view/:id', (req, res) => {
   ///res.send("omidomid");
   Scrap.findById(req.params.id).lean().exec(function (error, scrap) {
     res.render('admin/scraps/view', { layout: 'index', scrap: scrap });
@@ -90,19 +88,27 @@ router.get('/create', (req, res) => {
   res.render('admin/scraps/create', { layout: 'index' });
 })
 
-router.get('/delete/:id',(req,res)=>{
-  Scrap.deleteOne({_id:req.params.id}).then((resd)=>{
+router.get('/delete/:id', (req, res) => {
+  var fileName = ''
+  Scrap.findOne({ _id: req.params.id }).then(scrap => {
+    console.log(scrap)
+    fileName = scrap.jsFilePath;
+  })
+
+  Scrap.deleteOne({ _id: req.params.id }).then((resd) => {
+
+    fs.unlinkSync(fileName)
     res.redirect('/admin/scraps');
   }).catch()
-})
+
+}
+)
+
 
 router.post('/create', upload.single('jsFile'), (req, res) => {
-  // const file = req.file
-  // console.log(file);
-  // res.send(file);
-  // return;
-  //path
-  
+
+  const file = req.file
+
 
   const { websitename, url } = req.body;
   let errors = [];
@@ -119,12 +125,12 @@ router.post('/create', upload.single('jsFile'), (req, res) => {
 
 
   if (errors.length > 0) {
-      res.render('admin/scraps/create', {
-        errors,
-        websitename,
-        url,
+    res.render('admin/scraps/create', {
+      errors,
+      websitename,
+      url,
 
-      });
+    });
   }
 
   else {
@@ -142,15 +148,16 @@ router.post('/create', upload.single('jsFile'), (req, res) => {
         const newScrap = new Scrap({
           websitename,
           url,
+
         });
+        newScrap.jsFilePath = file.path;
         newScrap.save().then(scrap => {
-          //req.flash('success_msg', 'You are create new scrap')
+
           res.redirect('/admin/scraps');
         }).catch(err => console.log(err))
       }
     });
   }
 })
-
 
 module.exports = router;

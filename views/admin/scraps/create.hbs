@@ -1,4 +1,4 @@
-<form action="/admin/scraps/create" method="POST">
+<form action="/admin/scraps/create" method="POST" enctype="multipart/form-data">
   <div class="form-group">
     <label for="Website">Website</label>
     <input name="websitename" type="text" class="uk-input uk-form-medium" id="websitename"
@@ -11,7 +11,7 @@
 
   <div class="form-group">
     <label for="url">select your Javascript file</label>
-    <input type="file" name="jsFile" class="uk-input uk-form-medium" id="url" value="{{scrap.file}}">
+    <input type="file" name="jsFile" class="uk-input uk-form-medium" id="file" value="{{scrap.file}}">
   </div>
 
 

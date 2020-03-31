@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const multer = require('multer');
+
 const http = require('http');
 const path = require('path');
 const expressHbs = require('express-handlebars');
