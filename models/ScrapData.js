@@ -7,7 +7,7 @@ const scrapdataSchema=new mongoose.Schema({
         type:Date
     },
     resultData:{
-        type:mongoose.SchemaTypes.String
+        type:String
     }
 
 });

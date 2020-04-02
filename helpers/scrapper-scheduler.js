@@ -12,7 +12,7 @@ function diff_minutes(dt2, dt1) {
 
     var diff = (dt2.getTime() - dt1.getTime()) / 1000;
     diff /= 60;
-    return Math.abs(Math.round(diff));
+    return (Math.round(diff));
 
 }
 var CronJob = require('cron').CronJob;
@@ -31,18 +31,20 @@ var job = new CronJob('* * * * *', async function () {
 
         if (rss.length != 0) continue;
         var d = new Date();
-
-
+         console.log('now time is ',new Date());
+         console.log('last date done is ',s.lastDoneDate)
         var comp = diff_minutes(d, s.lastDoneDate);
         var modulepath = '';
         if (comp === 0 || comp > 0) {
             s.lastDoneDate.setTime(s.lastDoneDate.getTime() + s.everyMinute * 60000);
-            Scrap.findOne({ _id: s.id }, function (err, doc) {
+            Scrap.findOne({ _id: s.id }, (err, doc) =>{
                 if (comp === 0) {
+                    console.log('is equal');
                     doc.lastDoneDate = s.lastDoneDate.getTime() + (s.everyMinute * 60000);
                 }
                 else {
-                    doc.lastDoneDate = d.getTime() + (s.everyMinute * 60000);
+                    console.log('comp is gr and d.getTime() is ',d.getTime())
+                    doc.lastDoneDate = new Date(d.getTime() + (s.everyMinute * 60000));
                 }
 
                 modulepath = s.jsFilePath;
@@ -68,8 +70,14 @@ var job = new CronJob('* * * * *', async function () {
                              
                     });
                 }
-
-                doc.save();
+                
+                doc.save((err)=>{
+                    if(err){
+                        console.log(err)
+                    }else{
+                        console.log('doc is saved')
+                    }
+                });
             });
 
         }
