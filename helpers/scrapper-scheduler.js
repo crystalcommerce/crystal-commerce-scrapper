@@ -26,7 +26,7 @@ var job = new CronJob('* * * * *', async function () {
     for (let i = 0; i < scrapers.length; i++) {
         const s = scrapers[i];
         let id = s._id;
-
+        console.log('first scrap filter')
         let rss = runningScrapper.filter(rs => rs.config.id == id);
 
         if (rss.length != 0) continue;
@@ -58,10 +58,14 @@ var job = new CronJob('* * * * *', async function () {
                         //it json file, 
                         //put it into db let call it scrapData 
                         //id- scrapid - {{data}} - date
-                       var scrapData = new ScrapData({ scrapId:doc._id,resultData:data,createdDate:Date.now });
+
+                       var scrapData = new ScrapData({ scrapId:doc._id,resultData:JSON.stringify(data),createdDate:Date.now() });
+                       console.log('saving ....')
                          scrapData.save(function (err) {
                                if (err) console.log(err)
                              });
+                             console.log('saved and next date',doc.lastDoneDate)
+                             
                     });
                 }
 
