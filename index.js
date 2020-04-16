@@ -1,3 +1,4 @@
+console.log("custom test message from jesse");
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -22,9 +23,9 @@ const app = express()
 const port = 3000;
 const { ensureAuthenticated, forwardAuthenticated } = require('./config/auth');
 
- require('./config/passport')(passport);
+require('./config/passport')(passport);
 
- const {select,generateDate,paginate} = require('./helpers/handlebars-helpers');
+const {select,generateDate,paginate} = require('./helpers/handlebars-helpers');
 const db = require('./config/keys').mongoURI;
 
 
