@@ -1,5 +1,5 @@
-//dbPassword = 'mongodb+srv://YOUR_USERNAME_HERE:'+ encodeURIComponent('YOUR_PASSWORD_HERE') + '@CLUSTER_NAME_HERE.mongodb.net/test?retryWrites=true';
-const mongodb='http://localhost:27017/MyDb'
+dbPassword = 'mongodb+srv://crystal:tR1MZq40N@cluster0-vlbkg.mongodb.net/test?retryWrites=true&w=majority';
+const mongodb=dbPassword
 module.exports = {
     mongoURI:mongodb
 }; 
