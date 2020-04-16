@@ -1,4 +1,3 @@
-console.log("custom test message from jesse");
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -14,9 +13,11 @@ const User = require("./model/User");
 const scheduler = require('./helpers/scrapper-scheduler');
 const M = require('./modules/db.yugioh-card');
 let m = new M();
+console.log("custom test message from jesse");
 m.start(a=>{
   console.log(a);
 })
+console.log("2nd custom test message from jesse");
 require("dotenv").config();
 // const User = require('./models/User');
 const app = express()
