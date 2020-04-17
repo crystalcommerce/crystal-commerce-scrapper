@@ -20,6 +20,7 @@ require("dotenv").config();
 // const User = require('./models/User');
 const app = express()
 const port = process.env.PORT || 3000;
+const mongo_db_uri_cc = (process.env.MONGO_DB_URI || "mongodb://localhost:27017/") + "cc?retryWrites=true&w=majority";
 const { ensureAuthenticated, forwardAuthenticated } = require('./config/auth');
 
 require('./config/passport')(passport);
@@ -35,7 +36,7 @@ app.engine('hbs', expressHbs({extname:'hbs', defaultLayout:'main',layoutsDir:__d
 app.set('view engine', 'hbs');
 
 mongoose
-  .connect('mongodb+srv://crystal:tR1MZq40N@cluster0-vlbkg.mongodb.net/test?retryWrites=true&w=majority',
+  .connect(mongo_db_uri_cc,
     { useNewUrlParser: true }
   )
   .then(() => console.log('MongoDB Connected'))
