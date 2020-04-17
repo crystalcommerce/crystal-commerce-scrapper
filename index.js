@@ -19,7 +19,7 @@ m.start(a=>{
 require("dotenv").config();
 // const User = require('./models/User');
 const app = express()
-const port = 3000;
+const port = 8081;
 const { ensureAuthenticated, forwardAuthenticated } = require('./config/auth');
 
 require('./config/passport')(passport);
