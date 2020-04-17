@@ -109,10 +109,6 @@ app.use('/admin/scraps',scraps)
 
 ///check if admin user exists and create it.
 
-console.log("custom test message from jesse");
-
 http.createServer(app).listen(port);
-
-console.log("2nd custom test message from jesse");
 
 ///add corn jobs for run scrappers
