@@ -37,7 +37,7 @@ class Yugioh {
     async initializePuppeteer() {
 
         const browser = await puppeteer.launch({
-            executablePath: '/usr/bin/google-chrome-stable',
+            executablePath: process.env.CHROME_PATH,
             headless: true,
             args: [
                 'no-sandbox',
