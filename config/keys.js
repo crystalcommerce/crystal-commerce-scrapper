@@ -1,5 +1,4 @@
-dbPassword = 'mongodb+srv://crystal:tR1MZq40N@cluster0-vlbkg.mongodb.net/test?retryWrites=true&w=majority';
-const mongodb=dbPassword
+const mongodb = (process.env.MONGO_DB_URI || "mongodb://localhost:27017/") + "MyDb?retryWrites=true&w=majority";
 module.exports = {
     mongoURI:mongodb
 }; 
