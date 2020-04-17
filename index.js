@@ -16,7 +16,6 @@ let m = new M();
 m.start(a=>{
   console.log(a);
 })
-console.log("2nd custom test message from jesse");
 require("dotenv").config();
 // const User = require('./models/User');
 const app = express()
@@ -28,7 +27,6 @@ require('./config/passport')(passport);
 const {select,generateDate,paginate} = require('./helpers/handlebars-helpers');
 const db = require('./config/keys').mongoURI;
 
-console.log("third custom test message from jesse");
 
 app.set('views', path.join(__dirname, 'views'));
 //console.log(path.join(__dirname, 'views'))
@@ -43,7 +41,6 @@ mongoose
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log(err));
 
-console.log("4th custom test message from jesse");
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -64,7 +61,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-console.log("fifth custom test message from jesse");
 
 app.use(flash());
 
@@ -88,7 +84,6 @@ res.render('admin_home', {
   user: req.user
 }));
 //res.render('main', {layout : 'index'});
-console.log("6th custom test message from jesse");
 
 app.get('/download', (req, res) => res.render('admin_home'));
 app.get('/add-new', (req, res) => res.render('admin_home'));
@@ -108,15 +103,16 @@ app.get('/register',(req,res)=>{
     }
   })
 });
-console.log("7th custom test message from jesse");
 
 app.use('/admin/users',users)
 app.use('/admin/scraps',scraps)
 
 ///check if admin user exists and create it.
 
+console.log("custom test message from jesse");
 
 http.createServer(app).listen(port);
 
+console.log("2nd custom test message from jesse");
 
 ///add corn jobs for run scrappers
