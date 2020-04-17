@@ -11,11 +11,15 @@ const mongoose=require('mongoose')
 const flash = require('connect-flash');
 const User = require("./model/User");
 const scheduler = require('./helpers/scrapper-scheduler');
-const M = require('./modules/db.yugioh-card');
-let m = new M();
-m.start(a=>{
-  console.log(a);
-})
+
+// This commented-out block seems to start a scraping script on start up
+// Is this just part of development?  Shouldn't this be abstracted out to a cron job?
+// const M = require('./modules/db.yugioh-card');
+// let m = new M();
+// m.start(a=>{
+//   console.log(a);
+// })
+
 require("dotenv").config();
 // const User = require('./models/User');
 const app = express()
