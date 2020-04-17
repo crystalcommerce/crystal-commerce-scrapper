@@ -13,7 +13,6 @@ const User = require("./model/User");
 const scheduler = require('./helpers/scrapper-scheduler');
 const M = require('./modules/db.yugioh-card');
 let m = new M();
-console.log("custom test message from jesse");
 m.start(a=>{
   console.log(a);
 })
@@ -29,6 +28,7 @@ require('./config/passport')(passport);
 const {select,generateDate,paginate} = require('./helpers/handlebars-helpers');
 const db = require('./config/keys').mongoURI;
 
+console.log("third custom test message from jesse");
 
 app.set('views', path.join(__dirname, 'views'));
 //console.log(path.join(__dirname, 'views'))
@@ -43,6 +43,7 @@ mongoose
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log(err));
 
+console.log("4th custom test message from jesse");
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -63,6 +64,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+console.log("fifth custom test message from jesse");
 
 app.use(flash());
 
@@ -86,6 +88,7 @@ res.render('admin_home', {
   user: req.user
 }));
 //res.render('main', {layout : 'index'});
+console.log("6th custom test message from jesse");
 
 app.get('/download', (req, res) => res.render('admin_home'));
 app.get('/add-new', (req, res) => res.render('admin_home'));
@@ -105,6 +108,7 @@ app.get('/register',(req,res)=>{
     }
   })
 });
+console.log("7th custom test message from jesse");
 
 app.use('/admin/users',users)
 app.use('/admin/scraps',scraps)
