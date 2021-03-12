@@ -15,7 +15,15 @@
             <td>{{url}}</td>
             <td>
                 <a href="scraps/edit/{{_id}}" class="btn btn-info"><span uk-icon="pencil"></span></a>
-                <a href="scraps/view/{{_id}}" class="btn btn-info"><span uk-icon="cloud-download"></span></a>
+                <a href="scraps/changeStatus/{{_id}}" class="btn btn-info"><span uk-icon="pencil"></span></a>
+                {{!-- <a href="scraps/view/{{_id}}" class="btn btn-info"><span uk-icon="cloud-download">
+                        {{#if disabled}}
+                        <span>Enable</span>
+                        {{else}}
+                        <span>Disable</span>
+                        {{/if}}
+                    </span>
+                </a> --}}
                 <a href="scraps/delete/{{_id}}" class="btn btn-info"><span uk-icon="trash"></span></a>
             </td>
         </tr>

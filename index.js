@@ -11,25 +11,20 @@ const mongoose=require('mongoose')
 const flash = require('connect-flash');
 const User = require("./model/User");
 const scheduler = require('./helpers/scrapper-scheduler');
-
-// This commented-out block seems to start a scraping script on start up
-// Is this just part of development?  Shouldn't this be abstracted out to a cron job?
-// const M = require('./modules/db.yugioh-card');
-// let m = new M();
-// m.start(a=>{
-//   console.log(a);
-// })
-
+const M = require('./modules/db.yugioh-card');
+let m = new M();
+m.start(a=>{
+  console.log(a);
+})
 require("dotenv").config();
 // const User = require('./models/User');
 const app = express()
-const port = process.env.PORT || 3000;
-const mongo_db_uri_cc = (process.env.MONGO_DB_URI || "mongodb://localhost:27017/") + "cc?retryWrites=true&w=majority";
+const port = 3000;
 const { ensureAuthenticated, forwardAuthenticated } = require('./config/auth');
 
-require('./config/passport')(passport);
+ require('./config/passport')(passport);
 
-const {select,generateDate,paginate} = require('./helpers/handlebars-helpers');
+ const {select,generateDate,paginate} = require('./helpers/handlebars-helpers');
 const db = require('./config/keys').mongoURI;
 
 
@@ -40,7 +35,7 @@ app.engine('hbs', expressHbs({extname:'hbs', defaultLayout:'main',layoutsDir:__d
 app.set('view engine', 'hbs');
 
 mongoose
-  .connect(mongo_db_uri_cc,
+  .connect('mongodb://localhost:27017/cc',
     { useNewUrlParser: true }
   )
   .then(() => console.log('MongoDB Connected'))
@@ -114,6 +109,8 @@ app.use('/admin/scraps',scraps)
 
 ///check if admin user exists and create it.
 
+
 http.createServer(app).listen(port);
+
 
 ///add corn jobs for run scrappers

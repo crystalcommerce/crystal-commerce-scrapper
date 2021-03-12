@@ -3,8 +3,7 @@
 const mongoose = require("mongoose");
 
 // Replace this with your MONGOURI.
-
-const MONGOURI = (process.env.MONGO_DB_URI || "mongodb://localhost:27017/") + "scraper?retryWrites=true&w=majority";
+const MONGOURI = "mongodb://localhost:27017/scraper";
 
 const InitiateMongoServer = async () => {
   try {

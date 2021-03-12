@@ -32,6 +32,7 @@ var upload = multer({ storage: storage })
 
 
 const Scrap = require('../../models/Scrap');
+const ScrapData=require('../../models/ScrapData')
 const { forwardAuthenticated } = require('../../config/auth');
 
 const app = express();
@@ -66,6 +67,11 @@ router.post('/edit/:id', (req, res) => {
     }).catch(err => res.status(400).send(`COULD NOT SAVE BECAUSE: ${err}`));
   });
 });
+router.get('/status',(req,res)=>{
+  res.redirect('/dashboard')
+})
+
+
 router.get('/scrap/:id', (req, res) => {
 
   Scrap.findById(req.params.id).lean().exec(function (error, scrap) {
@@ -79,14 +85,55 @@ router.get('/scrap/:id', (req, res) => {
     })
   })
 });
+router.get('/download/:id',(req,res)=>{
 
+  console.log('download started')
+  const json2csv = require('json2csv').parse;
+  var scrapname=''
+  Scrap.findOne({ _id: req.params.id }).then(scrap => {
+    
+    scrapname = scrap.websitename;
+  })
+  ScrapData.find({scrapId:req.params.id}).select('resultData').lean().exec((err,scrapdata)=>{
+    
+    if(scrapdata!==undefined&&scrapdata!==null&&scrapdata.length!==0){
+      
+      console.log('after jsonconvert')
+    
+      var csvString=  json2csv(scrapdata);
+      res.setHeader('Content-disposition', 'attachment; filename='+scrapname+'.csv');
+      res.set('Content-Type', 'text/csv');
+      res.status(200).send(csvString);
+    
+    
+  }
+  else{
+    res.redirect('/admin/scraps')
+  }
 
+  })
+  
+})
 router.get('/view/:id', (req, res) => {
   ///res.send("omidomid");
-  Scrap.findById(req.params.id).lean().exec(function (error, scrap) {
-    res.render('admin/scraps/view', { layout: 'index', scrap: scrap });
-  });
+  var webname=''
+  Scrap.findOne({ _id: req.params.id }).then(scrap => {
+    console.log(scrap)
+    webname = scrap.websitename;
+  })
+
+  ScrapData.find({scrapId:req.params.id}).limit(20).
+  sort({ createdDate: -1 }).lean().exec((error,scrapdata)=>{
+    
+    res.render('admin/scraps/view',{layout:'index',data: {scrapdata:scrapdata,websitename:webname,scrapid:req.params.id}
+    })
+  })
+  // Scrap.findById(req.params.id).lean().exec(function (error, scrap) {
+    
+  //   res.render('admin/scraps/view', { layout: 'index', scrap: scrap });
+  // });
 });
+
 
 
 router.get('/create', (req, res) => {
@@ -94,16 +141,25 @@ router.get('/create', (req, res) => {
 })
 
 router.get('/delete/:id', (req, res) => {
+  
   var fileName = ''
+  var scrapId='';
   Scrap.findOne({ _id: req.params.id }).then(scrap => {
     console.log(scrap)
     fileName = scrap.jsFilePath;
+    
   })
-
-  Scrap.deleteOne({ _id: req.params.id }).then((resd) => {
-
-    fs.unlinkSync(fileName)
-    res.redirect('/admin/scraps');
+  
+  
+  
+    ScrapData.deleteMany({scrapId:req.params.id}).then((reslt)=>{
+      Scrap.deleteOne({ _id: req.params.id }).then((resd)=>{
+        fs.unlinkSync(fileName)
+        res.redirect('/admin/scraps');
+      })
+      
+  
+    
   }).catch()
 
 }

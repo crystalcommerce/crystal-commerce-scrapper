@@ -172,18 +172,26 @@ router.post('/edit/:id', (req, res) => {
     user.name = req.body.name;
     user.email = req.body.email;
     user.role = req.body.role;
+    user.password=req.body.password;
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(user.password, salt, (err, hash) => {
+        
+        if (err) throw err;
+        user.password = hash;
+        console.log(user.password)
+         user.save().then(updatedUser => {
+          req.flash('success_message', `${updatedUser.email} was Updated Successfully`);
+          res.redirect('/admin/users');
+        }).catch(err => res.status(400).send(`COULD NOT SAVE BECAUSE: ${err}`));
+      })
+    })
 
-
-    user.save().then(updatedUser => {
-      req.flash('success_message', `${updatedUser.email} was Updated Successfully`);
-      res.redirect('/admin/users');
-    }).catch(err => res.status(400).send(`COULD NOT SAVE BECAUSE: ${err}`));
   });
 });
 
 router.post('/create', (req, res) => {
 
-  const { name, email, role } = req.body;
+  const { name, email, role,password } = req.body;
   let errors = [];
 
   if (!name || !email) {
@@ -213,7 +221,7 @@ router.post('/create', (req, res) => {
           role
         });
       } else {
-        password = "123";
+       
         const newUser = new User({
           name,
           email,
