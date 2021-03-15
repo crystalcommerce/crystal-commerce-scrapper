@@ -1,4 +1,22 @@
 <div>
-    <i class="fas fa-play website-page-icon"></i>
+    <a href="/admin/scraps/download/{{data.scrapid}}" class="btn btn-info">
+    <i  class="fas fa-play website-page-icon"></i>
+    </a>
     <i class="fas fa-stop website-page-icon"></i>
 </div>
+<div>From Website: {{data.websitename}}</div>
+<table class="uk-table uk-table-striped">
+    <thead>
+        <tr>
+           <th>Created Date</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {{#each data.scrapdata}}
+        <tr>
+            <td>{{createdDate }}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

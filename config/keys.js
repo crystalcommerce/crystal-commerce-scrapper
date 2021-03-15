@@ -1,4 +1,5 @@
-const mongodb = (process.env.MONGO_DB_URI || "mongodb://localhost:27017/") + "MyDb?retryWrites=true&w=majority";
+//dbPassword = 'mongodb+srv://YOUR_USERNAME_HERE:'+ encodeURIComponent('YOUR_PASSWORD_HERE') + '@CLUSTER_NAME_HERE.mongodb.net/test?retryWrites=true';
+const mongodb='http://localhost:27017/MyDb'
 module.exports = {
     mongoURI:mongodb
 }; 
