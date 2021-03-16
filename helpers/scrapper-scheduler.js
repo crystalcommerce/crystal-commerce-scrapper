@@ -32,7 +32,12 @@ var job = new CronJob('* * * * *', async function () {
         console.log('first scrap filter')
         let rss = runningScrapper.filter(rs => rs.config.id == id);
 
-        if (rss.length != 0) continue;
+        if (rss.length != 0) {
+            console.log('runing');
+            continue;
+        }
+        console.log('hererererrererer');
+        
         var d = new Date();
         console.log('now time is ', new Date());
         console.log('last date done is ', s.lastDoneDate)

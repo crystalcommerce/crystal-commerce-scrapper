@@ -107,10 +107,14 @@ class Yugioh {
     async extactPagesLinks() {
         console.log('going to '.gray, `${this.config.url}`.green);
         const page = await this.browser.newPage();
+        console.log("hererere");
         await page.goto(this.config.url);
-        console.log('Address loaded'.green);
+        console.log("hererere");
+        console.log("hererere");
         const linkHrefs = await page.$$eval('.box_list li .link_value', linkHrefs => linkHrefs.map(l => l.value));
+        console.log('Address loaded'.green);
         await page.close();
+        console.log('Address loaded'.green);
         let links =  linkHrefs.map(l => `${this.config.base_url}${l}`);
         console.log(links);
         return links;
