@@ -111,7 +111,9 @@ class Yugioh {
         console.log('Address loaded'.green);
         const linkHrefs = await page.$$eval('.box_list li .link_value', linkHrefs => linkHrefs.map(l => l.value));
         await page.close();
-        return linkHrefs.map(l => `${this.config.base_url}${l}`);
+        let links =  linkHrefs.map(l => `${this.config.base_url}${l}`);
+        console.log(links);
+        return links;
     }
     async close() {
         await this.browser.close();
