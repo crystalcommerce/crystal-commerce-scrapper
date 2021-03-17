@@ -37,7 +37,7 @@ class Yugioh {
     async initializePuppeteer() {
 
         const browser = await puppeteer.launch({
-            headless: true,
+            headless: false,
             args: [
                 'no-sandbox',
                 'disable-setuid-sandbox',
@@ -107,10 +107,7 @@ class Yugioh {
     async extactPagesLinks() {
         console.log('going to '.gray, `${this.config.url}`.green);
         const page = await this.browser.newPage();
-        console.log("hererere");
         await page.goto(this.config.url);
-        console.log("hererere");
-        console.log("hererere");
         const linkHrefs = await page.$$eval('.box_list li .link_value', linkHrefs => linkHrefs.map(l => l.value));
         console.log('Address loaded'.green);
         await page.close();

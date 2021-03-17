@@ -107,6 +107,7 @@ router.get('/download/:id',(req,res)=>{
     
     
   }
+  
   else{
     res.redirect('/admin/scraps')
   }

@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer');
 var url = require('url');
 var colors = require('colors');
 
-class Yugioh {
+class BoardGameGeek {
     browser = null;
     mainPage = null;
     data = {};
