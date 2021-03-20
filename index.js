@@ -16,8 +16,11 @@ require("dotenv").config();
 var multer  = require('multer')
 var upload = multer({ dest: 'uploads/' })
 
-// var m =  require('./modules/test.js');
+var m =  require('./modules/test.js');
 
+// m.start((data)=>{
+
+// })
 const app = express()
 const port = 3000;
 const { ensureAuthenticated, forwardAuthenticated } = require('./config/auth');
