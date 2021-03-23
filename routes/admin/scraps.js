@@ -32,7 +32,7 @@ var upload = multer({ storage: storage })
 
 
 const Scrap = require('../../models/Scrap');
-const ScrapData=require('../../models/ScrapData')
+const ScrapData = require('../../models/ScrapData')
 const { forwardAuthenticated } = require('../../config/auth');
 
 const app = express();
@@ -67,7 +67,7 @@ router.post('/edit/:id', (req, res) => {
     }).catch(err => res.status(400).send(`COULD NOT SAVE BECAUSE: ${err}`));
   });
 });
-router.get('/status',(req,res)=>{
+router.get('/status', (req, res) => {
   res.redirect('/dashboard')
 })
 
@@ -85,52 +85,55 @@ router.get('/scrap/:id', (req, res) => {
     })
   })
 });
-router.get('/download/:id',(req,res)=>{
+router.get('/download/:id', (req, res) => {
 
   console.log('download started')
   const json2csv = require('json2csv').parse;
-  var scrapname=''
+  var scrapname = ''
   Scrap.findOne({ _id: req.params.id }).then(scrap => {
-    
+
     scrapname = scrap.websitename;
   })
-  ScrapData.find({scrapId:req.params.id}).select('resultData').lean().exec((err,scrapdata)=>{
-    
-    if(scrapdata!==undefined&&scrapdata!==null&&scrapdata.length!==0){
-      
+  ScrapData.find({ scrapId: req.params.id }).select('resultData').lean().exec((err, scrapdata) => {
+
+    if (scrapdata !== undefined && scrapdata !== null && scrapdata.length !== 0) {
+      const { convertArrayToCSV } = require('convert-array-to-csv');
+
+      scrapdata = scrapdata[0]["resultData"];
+      if(typeof(scrapdata) == 'string') scrapdata = JSON.parse(scrapdata);
+      console.log(scrapdata);
+
+      const csvString = convertArrayToCSV(scrapdata);
+      console.log(csvString);
       console.log('after jsonconvert')
-    
-      var csvString=  json2csv(scrapdata);
-      res.setHeader('Content-disposition', 'attachment; filename='+scrapname+'.csv');
+      res.setHeader('Content-disposition', 'attachment; filename=' + 'omid' + '.csv');
       res.set('Content-Type', 'text/csv');
       res.status(200).send(csvString);
-    
-    
-  }
-  
-  else{
-    res.redirect('/admin/scraps')
-  }
+    }
 
+    else {
+      res.redirect('/admin/scraps')
+    }
   })
-  
+
 })
 router.get('/view/:id', (req, res) => {
   ///res.send("omidomid");
-  var webname=''
+  var webname = ''
   Scrap.findOne({ _id: req.params.id }).then(scrap => {
     console.log(scrap)
     webname = scrap.websitename;
   })
 
-  ScrapData.find({scrapId:req.params.id}).limit(20).
-  sort({ createdDate: -1 }).lean().exec((error,scrapdata)=>{
-    
-    res.render('admin/scraps/view',{layout:'index',data: {scrapdata:scrapdata,websitename:webname,scrapid:req.params.id}
+  ScrapData.find({ scrapId: req.params.id }).limit(20).
+    sort({ createdDate: -1 }).lean().exec((error, scrapdata) => {
+
+      res.render('admin/scraps/view', {
+        layout: 'index', data: { scrapdata: scrapdata, websitename: webname, scrapid: req.params.id }
+      })
     })
-  })
   // Scrap.findById(req.params.id).lean().exec(function (error, scrap) {
-    
+
   //   res.render('admin/scraps/view', { layout: 'index', scrap: scrap });
   // });
 });
@@ -142,25 +145,25 @@ router.get('/create', (req, res) => {
 })
 
 router.get('/delete/:id', (req, res) => {
-  
+
   var fileName = ''
-  var scrapId='';
+  var scrapId = '';
   Scrap.findOne({ _id: req.params.id }).then(scrap => {
     console.log(scrap)
     fileName = scrap.jsFilePath;
-    
+
   })
-  
-  
-  
-    ScrapData.deleteMany({scrapId:req.params.id}).then((reslt)=>{
-      Scrap.deleteOne({ _id: req.params.id }).then((resd)=>{
-        fs.unlinkSync(fileName)
-        res.redirect('/admin/scraps');
-      })
-      
-  
-    
+
+
+
+  ScrapData.deleteMany({ scrapId: req.params.id }).then((reslt) => {
+    Scrap.deleteOne({ _id: req.params.id }).then((resd) => {
+      fs.unlinkSync(fileName)
+      res.redirect('/admin/scraps');
+    })
+
+
+
   }).catch()
 
 }
@@ -170,7 +173,7 @@ router.get('/delete/:id', (req, res) => {
 router.post('/create', upload.single('jsFile'), (req, res) => {
 
   const file = req.file
-  
+
   console.log("file =>", req.file);
 
   const { websitename, url, everyMinute } = req.body;

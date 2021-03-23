@@ -35,15 +35,13 @@ class dbsCardgame {
     }
 
     async init() {
-        console.log("here 1")
         this.browser = await this.initializePuppeteer(this.config.url);
-        console.log("here 2")
     }
 
     async initializePuppeteer() {
 
         const browser = await puppeteer.launch({
-            headless: true,
+            headless: false,
             args: [
                 'no-sandbox',
                 'disable-setuid-sandbox',
@@ -54,7 +52,9 @@ class dbsCardgame {
 
     async start(onfinish) {
         ///get urls
+        console.log(this.browser);
         if (!this.browser) await this.init();
+        console.log(this.browser);
         let cards = await this.extactPageData();
         //create data sheet
 

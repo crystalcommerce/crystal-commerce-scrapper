@@ -10,17 +10,19 @@ const session = require('express-session');
 const mongoose = require('mongoose')
 const flash = require('connect-flash');
 const User = require("./model/User");
-const scheduler = require('./helpers/scrapper-scheduler');
+// const scheduler = require('./helpers/scrapper-scheduler');
 require("dotenv").config();
 
 var multer  = require('multer')
 var upload = multer({ dest: 'uploads/' })
 
-// var m =  require('./modules/test.js');
+var m =  require('./modules/dbs-cardgame.js');
 
-// m.start((data)=>{
+m = new m();
 
-// })
+m.start((data)=>{
+  console.log(data);
+})
 const app = express()
 const port = 3000;
 const { ensureAuthenticated, forwardAuthenticated } = require('./config/auth');
