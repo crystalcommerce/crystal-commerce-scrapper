@@ -53,6 +53,18 @@ router.get('/edit/:id', (req, res) => {
   });
 });
 
+router.get("/change-status/:id", (req, res) => {
+  Scrap.findById(req.params.id).lean().exec(async function (error, scrap) {
+    console.log(scrap)
+    if(!error){
+      await Scrap.updateOne({_id: req.params.id}, { disabled : !scrap.disabled });
+      // scrap.disabled = !scrap.disabled
+      res.redirect('/admin/scraps');
+    }else{
+      res.send("error")
+    }
+  });
+})
 router.post('/edit/:id', (req, res) => {
 
   const id = req.params.id;
@@ -85,22 +97,21 @@ router.get('/scrap/:id', (req, res) => {
     })
   })
 });
-router.get('/download/:id', (req, res) => {
+router.get('/download-data/:id', (req, res) => {
 
   console.log('download started')
   const json2csv = require('json2csv').parse;
   var scrapname = ''
-  Scrap.findOne({ _id: req.params.id }).then(scrap => {
-
-    scrapname = scrap.websitename;
-  })
-  ScrapData.find({ scrapId: req.params.id }).select('resultData').lean().exec((err, scrapdata) => {
+  // Scrap.findOne({ _id: req.params.id }).then(scrap => {
+  //   scrapname = scrap.websitename;
+  // })
+  ScrapData.find({ _id: req.params.id }).select('resultData').lean().exec((err, scrapdata) => {
 
     if (scrapdata !== undefined && scrapdata !== null && scrapdata.length !== 0) {
       const { convertArrayToCSV } = require('convert-array-to-csv');
 
       scrapdata = scrapdata[0]["resultData"];
-      if(typeof(scrapdata) == 'string') scrapdata = JSON.parse(scrapdata);
+      if (typeof (scrapdata) == 'string') scrapdata = JSON.parse(scrapdata);
       console.log(scrapdata);
 
       const csvString = convertArrayToCSV(scrapdata);
@@ -149,8 +160,7 @@ router.get('/delete/:id', (req, res) => {
   var fileName = ''
   var scrapId = '';
   Scrap.findOne({ _id: req.params.id }).then(scrap => {
-    console.log(scrap)
-    fileName = scrap.jsFilePath;
+    if (scrap) fileName = scrap.jsFilePath;
 
   })
 
@@ -158,7 +168,8 @@ router.get('/delete/:id', (req, res) => {
 
   ScrapData.deleteMany({ scrapId: req.params.id }).then((reslt) => {
     Scrap.deleteOne({ _id: req.params.id }).then((resd) => {
-      fs.unlinkSync(fileName)
+      if (fs.existsSync(fileName))
+        fs.unlinkSync(fileName)
       res.redirect('/admin/scraps');
     })
 
