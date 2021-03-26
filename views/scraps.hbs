@@ -11,21 +11,21 @@
     <tbody>
         {{#each scraps}}
         <tr>
-            <td>{{websitename}}</td>
+            <td>{{websitename}}
+                (
+                {{#if disabled}}
+                <span>Disabled</span>
+                {{else}}
+                <span>Enabled</span>
+                {{/if}}
+                )
+
+            </td>
             <td>{{url}}</td>
-            <td>
-                <a href="scraps/edit/{{_id}}" class="btn btn-info"><span uk-icon="pencil"></span></a>
-                {{!-- <a href="scraps/changeStatus/{{_id}}" class="btn btn-info"><span uk-icon="pencil"></span></a> --}}
-                <a href="scraps/download/{{_id}}" class="btn btn-info"><span uk-icon="download"></span></a>
-                <a href="scraps/view/{{_id}}" class="btn btn-info"><span>
-                        {{#if disabled}}
-                        <span>Enable</span>
-                        {{else}}
-                        <span>Disable</span>
-                        {{/if}}
-                    </span>
-                </a>
-                <a href="scraps/delete/{{_id}}" class="btn btn-info"><span uk-icon="trash"></span></a>
+            <td class="scrapper-icons">
+                <a href="scraps/edit/{{_id}}" class="btn btn-info"><span uk-icon="pencil"></span>Edit</a>
+                <a href="scraps/view/{{_id}}" class="btn btn-info"><span uk-icon="code"></span>View</a>
+                <a href="scraps/delete/{{_id}}" class="btn btn-info"><span uk-icon="trash"></span>Delete</a>
             </td>
         </tr>
         {{/each}}
