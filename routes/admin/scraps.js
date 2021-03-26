@@ -56,11 +56,11 @@ router.get('/edit/:id', (req, res) => {
 router.get("/change-status/:id", (req, res) => {
   Scrap.findById(req.params.id).lean().exec(async function (error, scrap) {
     console.log(scrap)
-    if(!error){
-      await Scrap.updateOne({_id: req.params.id}, { disabled : !scrap.disabled });
+    if (!error) {
+      await Scrap.updateOne({ _id: req.params.id }, { disabled: !scrap.disabled });
       // scrap.disabled = !scrap.disabled
       res.redirect('/admin/scraps');
-    }else{
+    } else {
       res.send("error")
     }
   });
@@ -96,6 +96,13 @@ router.get('/scrap/:id', (req, res) => {
       console.log(statsTable.text)
     })
   })
+
+});
+
+router.get('/delete-data/:id', (req, res) => {
+  ScrapData.deleteMany({ _id: req.params.id }).then((reslt) => {
+    res.redirect('/admin/scraps');
+  });
 });
 router.get('/download-data/:id', (req, res) => {
 
