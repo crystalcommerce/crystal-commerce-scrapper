@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const axios = require('axios');
 const cheerio = require('cheerio');
+const arrayToCsv = require('../../helpers/arrayToCsv');
 
 var uuid = require('uuid');
 
@@ -107,22 +108,15 @@ router.get('/delete-data/:id', (req, res) => {
 router.get('/download-data/:id', (req, res) => {
 
   console.log('download started')
-  const json2csv = require('json2csv').parse;
   var scrapname = ''
-  // Scrap.findOne({ _id: req.params.id }).then(scrap => {
-  //   scrapname = scrap.websitename;
-  // })
   ScrapData.find({ _id: req.params.id }).select('resultData').lean().exec((err, scrapdata) => {
 
     if (scrapdata !== undefined && scrapdata !== null && scrapdata.length !== 0) {
-      const { convertArrayToCSV } = require('convert-array-to-csv');
 
+      
       scrapdata = scrapdata[0]["resultData"];
-      if (typeof (scrapdata) == 'string') scrapdata = JSON.parse(scrapdata);
-      console.log(scrapdata);
-
-      const csvString = convertArrayToCSV(scrapdata);
-      console.log(csvString);
+      if(typeof(scrapdata) == "string") scrapdata = JSON.parse(scrapdata)      
+      const csvString = arrayToCsv({data:scrapdata});
       console.log('after jsonconvert')
       res.setHeader('Content-disposition', 'attachment; filename=' + 'omid' + '.csv');
       res.set('Content-Type', 'text/csv');
