@@ -71,10 +71,8 @@ var job = new CronJob('* * * * *', async function () {
                 console.log(runningScrapper);
 
                 await module.start(async (data) => {
-                    //console.log(data);
-                    //it json file, 
-                    //put it into db let call it scrapData 
-                    //id- scrapid - {{data}} - date
+                    
+                    console.log("omidomid", data);
 
                     var scrapData = new ScrapData({
                         scrapId: s._id, resultData: JSON.stringify(data),

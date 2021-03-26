@@ -1,8 +1,11 @@
 <div>
-    <a href="/admin/scraps/download/{{data.scrapid}}" class="btn btn-info">
+    <a href="/admin/scraps/change-status/{{data.scrapid}}" class="btn btn-info">
         <i class="fas fa-play website-page-icon"></i>
     </a>
-    <i class="fas fa-stop website-page-icon"></i>
+    <a href="/admin/scraps/change-status/{{data.scrapid}}" class="btn btn-info">
+        <i class="fas fa-stop website-page-icon"></i>
+    </a>
+    
 </div>
 <div>From Website: {{data.websitename}}</div>
 <table class="uk-table uk-table-striped">
@@ -16,6 +19,10 @@
         {{#each data.scrapdata}}
         <tr>
             <td>{{createdDate }}</td>
+            <td class="scrapper-icons">
+                <a href="/admin/scraps/download-data/{{_id}}" class="btn btn-download"><span uk-icon="download"></span>Download</a>
+                <a href="/admin/scraps/delete-data/{{_id}}" class="btn btn-info"><span uk-icon="trash"></span>Delete</a>
+            </td>
         </tr>
         {{/each}}
     </tbody>
