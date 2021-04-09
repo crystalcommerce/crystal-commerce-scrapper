@@ -48,7 +48,7 @@ app.engine('hbs', expressHbs({ extname: 'hbs', defaultLayout: 'main', layoutsDir
 app.set('view engine', 'hbs');
 
 mongoose
-  .connect('mongodb+srv://crystal:tR1MZq40N@cluster0-vlbkg.mongodb.net/test?retryWrites=true&w=majority',
+  .connect('mongodb+srv://crystal:tR1MZq40N@cluster0-vlbkg.mongodb.net/cc?retryWrites=true&w=majority',
     { useNewUrlParser: true }
   )
   .then(() => console.log('MongoDB Connected'))
