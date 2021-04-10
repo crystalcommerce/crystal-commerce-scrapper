@@ -24,7 +24,7 @@ var upload = multer({ dest: 'uploads/' })
 //   console.log(data);
 // })
 const app = express()
-const port = 3000;
+const port = process.env.PORT || 3000;
 const { ensureAuthenticated, forwardAuthenticated } = require('./config/auth');
 
 
