@@ -24,7 +24,7 @@ var upload = multer({ dest: 'uploads/' })
 //   console.log(data);
 // })
 const app = express()
-const port = 3000;
+const port = process.env.PORT || 3000;
 const { ensureAuthenticated, forwardAuthenticated } = require('./config/auth');
 
 
@@ -48,7 +48,7 @@ app.engine('hbs', expressHbs({ extname: 'hbs', defaultLayout: 'main', layoutsDir
 app.set('view engine', 'hbs');
 
 mongoose
-  .connect('mongodb://localhost:27017/cc',
+  .connect('mongodb+srv://crystal:tR1MZq40N@cluster0-vlbkg.mongodb.net/cc?retryWrites=true&w=majority',
     { useNewUrlParser: true }
   )
   .then(() => console.log('MongoDB Connected'))
