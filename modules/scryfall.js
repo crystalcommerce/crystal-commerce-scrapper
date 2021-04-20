@@ -23,6 +23,8 @@ class Scryfall {
             { id: 'level', title: 'Level' },
             { id: 'type', title: 'Monster Type' },
             { id: 'passcode', title: 'Passcode' }
+
+            
         ]
     };
 
