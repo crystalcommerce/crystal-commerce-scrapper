@@ -1,6 +1,7 @@
 branch-defaults:
   master:
     environment: scraper-env-three
+    group_suffix: null
 global:
   application_name: crystal-commerce-scrapper
   branch: null

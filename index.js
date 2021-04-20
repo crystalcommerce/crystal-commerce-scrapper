@@ -84,14 +84,16 @@ app.use(function (req, res, next) {
 app.use(express.static('public'));
 
 const users = require('./routes/admin/users');
-const scraps = require('./routes/admin/scraps')
+const scraps = require('./routes/admin/scraps');
+const dashboard = require('./routes/dashboard')
 //app.use('/users', require('./routes/users.js'));
 
 app.get('/', (req, res) => res.render('index'));
-app.get('/dashboard', (req, res) =>
-  res.render('admin_home', {
-    user: req.user
-  }));
+
+// app.get('/dashboard', (req, res) =>
+//   res.render('admin_home', {
+//     user: req.user
+//   }));
 //res.render('main', {layout : 'index'});
 
 app.get('/download', (req, res) => res.render('admin_home'));
@@ -114,4 +116,5 @@ app.get('/register', (req, res) => {
 });
 app.use('/admin/users', users)
 app.use('/admin/scraps', scraps)
+app.use('/dashboard', dashboard)
 http.createServer(app).listen(port);
