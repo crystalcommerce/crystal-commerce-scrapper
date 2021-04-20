@@ -37,7 +37,8 @@ class Yugioh {
     async initializePuppeteer() {
 
         const browser = await puppeteer.launch({
-            headless: false,
+            executablePath: '/usr/bin/google-chrome-stable',
+            headless: true,
             args: [
                 'no-sandbox',
                 'disable-setuid-sandbox',
