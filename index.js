@@ -11,7 +11,15 @@ const mongoose = require('mongoose')
 const flash = require('connect-flash');
 const User = require("./model/User");
 const scheduler = require('./helpers/scrapper-scheduler');
-require("dotenv").config();
+// require("dotenv").config();
+console.log(`.env.${process.env.NODE_ENV}`);
+let env = process.env.NODE_ENV;
+if(env) 
+  env = `.env.${process.env.NODE_ENV}`
+else 
+  env = '.env.prod'
+console.log(env)
+require('dotenv').config({ path: env })
 
 var multer  = require('multer')
 var upload = multer({ dest: 'uploads/' })
@@ -48,7 +56,7 @@ app.engine('hbs', expressHbs({ extname: 'hbs', defaultLayout: 'main', layoutsDir
 app.set('view engine', 'hbs');
 
 mongoose
-  .connect('mongodb+srv://crystal:tR1MZq40N@cluster0-vlbkg.mongodb.net/cc?retryWrites=true&w=majority',
+  .connect(process.env.MONGOURI,
     { useNewUrlParser: true }
   )
   .then(() => console.log('MongoDB Connected'))

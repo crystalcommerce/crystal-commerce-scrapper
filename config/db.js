@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 
 // Replace this with your MONGOURI.
 const MONGOURI =  process.env.MONGOURI;
-
 const InitiateMongoServer = async () => {
   try {
     await mongoose.connect(MONGOURI, {
