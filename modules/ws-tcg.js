@@ -72,19 +72,45 @@ class WSTCG {
                 let rowData = {};
                 for (let i in this.config.csvHeader) {
                     let col = this.config.csvHeader[i];
-                    const [elem] = await page.$x(col.xPath);
-                    if (elem) {
-                        try {
-                            let text = await page.evaluate(name => name.innerText, elem);
+                    if (col.id == 'productName') {
+                        col = this.config.csvHeader[1];
+                        var [elem] = await page.$x(col.xPath);
+                        let productName = '';
+                        if(elem){
+                            productName = await page.evaluate(name => name.innerText, elem);
+                        }
 
-                            text = text.replace(/[^0-9a-z ]/gi, '')
-                            rowData[col.id] = text;
+                        col = this.config.csvHeader[2];
+                        var [elem2] = await page.$x(col.xPath);
+                        if(elem2){
+                            productName += "-"  + await page.evaluate(name => name.innerText, elem2);
+                        }
 
-                            // await page.evaluate(name => name.innerText, elem);
-                        } catch (ex) {
-                            console.log(ex);
+
+                        col = this.config.csvHeader[8];
+                        var [elem3] = await page.$x(col.xPath);
+                        if(elem3){
+                            productName += "-"  + await page.evaluate(name => name.innerText, elem3);
+                        }
+
+                        rowData["productName"] = productName;
+
+                    } else {
+                        const [elem] = await page.$x(col.xPath);
+                        if (elem) {
+                            try {
+                                let text = await page.evaluate(name => name.innerText, elem);
+
+                                text = text.replace(/[^0-9a-z ]/gi, '')
+                                rowData[col.id] = text;
+
+                                // await page.evaluate(name => name.innerText, elem);
+                            } catch (ex) {
+                                console.log(ex);
+                            }
                         }
                     }
+                    
                 }
 
                 this.data.push(rowData)

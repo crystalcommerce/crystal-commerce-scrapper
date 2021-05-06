@@ -111,11 +111,12 @@ router.get('/download-data/:id', (req, res) => {
 
     if (scrapdata !== undefined && scrapdata !== null && scrapdata.length !== 0) {
 
-
+      let now  = new Date();
+      var csvFileName = now.getFullYear() + "-"+ now.getMonth() + "-" + now.getDate();
       scrapdata = scrapdata[0]["resultData"];
       if (typeof (scrapdata) == "string") scrapdata = JSON.parse(scrapdata)
       const csvString = arrayToCsv({ data: scrapdata });
-      res.setHeader('Content-disposition', 'attachment; filename=' + 'omid' + '.csv');
+      res.setHeader('Content-disposition', 'attachment; filename=' + csvFileName + '.csv');
       res.set('Content-Type', 'text/csv');
       res.status(200).send(csvString);
     }
