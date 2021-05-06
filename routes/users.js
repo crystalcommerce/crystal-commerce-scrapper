@@ -23,7 +23,6 @@ router.get('/login', forwardAuthenticated, (req, res) => res.render('index'));
 
 
 router.get('/register', (req, res) => {
-  console.log('jskjkjkjkjkjkjkjkj')
   User.findOne({role:'admin'}).then(usr=>{
     if(usr!==undefined&&usr!==null){
       

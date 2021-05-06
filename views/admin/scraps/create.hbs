@@ -11,7 +11,13 @@
 
   <div class="form-group">
     <label for="url">select your Javascript file</label>
-    <input type="file" name="jsFile" class="uk-input uk-form-medium" id="file" value="{{scrap.file}}">
+    <br />
+    <select class="uk-input uk-form-medium" name="file">
+      {{#each files}}
+        <option value="{{this}}">{{this}}</option>
+      {{/each}}
+    </select>
+    {{!-- <input type="file" name="jsFile" class="uk-input uk-form-medium" id="file" value="{{scrap.file}}"> --}}
   </div>
 
   <div class="form-group">

@@ -11,7 +11,6 @@ const mongoose = require('mongoose')
 const flash = require('connect-flash');
 const User = require("./model/User");
 const scheduler = require('./helpers/scrapper-scheduler');
-// require("dotenv").config();
 console.log(`.env.${process.env.NODE_ENV}`);
 let env = process.env.NODE_ENV;
 if(env) 
@@ -36,10 +35,14 @@ const port = process.env.PORT || 3000;
 const { ensureAuthenticated, forwardAuthenticated } = require('./config/auth');
 
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(cookieParser());
+// app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
 
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(multer().array())
+app.use(cookieParser());
 
 
 

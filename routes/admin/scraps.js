@@ -13,8 +13,11 @@ const passport = require('passport');
 var fs = require('fs');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
+const path = require('path');
+var appDir = path.dirname(require.main.filename);
 
-var filePath = 'uploads/'
+const modulePath = 'modules/';
+var filePath = 'uploads/';
 
 
 var storage = multer.diskStorage({
@@ -56,7 +59,7 @@ router.get('/edit/:id', (req, res) => {
 
 router.get("/change-status/:id", (req, res) => {
   Scrap.findById(req.params.id).lean().exec(async function (error, scrap) {
-    console.log(scrap)
+    // console.log(scrap)
     if (!error) {
       await Scrap.updateOne({ _id: req.params.id }, { disabled: !scrap.disabled });
       // scrap.disabled = !scrap.disabled
@@ -86,18 +89,13 @@ router.get('/status', (req, res) => {
 
 
 router.get('/scrap/:id', (req, res) => {
-
   Scrap.findById(req.params.id).lean().exec(function (error, scrap) {
     axios(scrap.url).then(response => {
-      console.log('after axios')
       const html = response.data;
       const $ = cheerio.load(html);
       const statsTable = $('.statsTableContainer > tr');
-      console.log(statsTable.length);
-      console.log(statsTable.text)
     })
   })
-
 });
 
 router.get('/delete-data/:id', (req, res) => {
@@ -113,11 +111,10 @@ router.get('/download-data/:id', (req, res) => {
 
     if (scrapdata !== undefined && scrapdata !== null && scrapdata.length !== 0) {
 
-      
+
       scrapdata = scrapdata[0]["resultData"];
-      if(typeof(scrapdata) == "string") scrapdata = JSON.parse(scrapdata)      
-      const csvString = arrayToCsv({data:scrapdata});
-      console.log('after jsonconvert')
+      if (typeof (scrapdata) == "string") scrapdata = JSON.parse(scrapdata)
+      const csvString = arrayToCsv({ data: scrapdata });
       res.setHeader('Content-disposition', 'attachment; filename=' + 'omid' + '.csv');
       res.set('Content-Type', 'text/csv');
       res.status(200).send(csvString);
@@ -133,7 +130,6 @@ router.get('/view/:id', (req, res) => {
   ///res.send("omidomid");
   var webname = ''
   Scrap.findOne({ _id: req.params.id }).then(scrap => {
-    console.log(scrap)
     webname = scrap.websitename;
   })
 
@@ -153,8 +149,9 @@ router.get('/view/:id', (req, res) => {
 
 
 router.get('/create', (req, res) => {
-  res.render('admin/scraps/create', { layout: 'index' });
-})
+  let files = fs.readdirSync(modulePath);
+  res.render('admin/scraps/create', { layout: 'index', files: files });
+});
 
 router.get('/delete/:id', (req, res) => {
 
@@ -169,8 +166,8 @@ router.get('/delete/:id', (req, res) => {
 
   ScrapData.deleteMany({ scrapId: req.params.id }).then((reslt) => {
     Scrap.deleteOne({ _id: req.params.id }).then((resd) => {
-      if (fs.existsSync(fileName))
-        fs.unlinkSync(fileName)
+      // if (fs.existsSync(fileName))
+        // fs.unlinkSync(fileName)
       res.redirect('/admin/scraps');
     })
 
@@ -182,13 +179,9 @@ router.get('/delete/:id', (req, res) => {
 )
 
 
-router.post('/create', upload.single('jsFile'), (req, res) => {
+router.post('/create', (req, res) => {
+  const { websitename, url, everyMinute, file} = req.body;
 
-  const file = req.file
-
-  console.log("file =>", req.file);
-
-  const { websitename, url, everyMinute } = req.body;
   let errors = [];
 
   if (!websitename || websitename === null) {
@@ -198,6 +191,11 @@ router.post('/create', upload.single('jsFile'), (req, res) => {
   if (!url || url === null) {
     console.log('url is ', url)
     errors.push({ msg: 'url is empty' })
+  }
+
+  if (!file || file === null) {
+    console.log('file is ', file)
+    errors.push({ msg: 'file is empty' })
   }
 
 
@@ -219,15 +217,17 @@ router.post('/create', upload.single('jsFile'), (req, res) => {
           errors,
           websitename,
           url,
-
         });
       } else {
+        let jsFilePath = path.join(modulePath, file);
+
         const newScrap = new Scrap({
           websitename,
           url,
-          everyMinute
+          everyMinute,
+          jsFilePath
         });
-        newScrap.jsFilePath = file.path;
+        // newScrap.jsFilePath = file.path;
         newScrap.save().then(scrap => {
           res.redirect('/admin/scraps');
         }).catch(err => console.log(err))
