@@ -188,12 +188,6 @@ router.post('/create', (req, res) => {
   if (errors.length > 0) {
     req.flash('error', error.map((m) => m.msg).join('\n'));
     res.redirect('/admin/scraps/create');
-    // , {
-    //   errors,
-    //   websitename,
-    //   url,
-
-    // }
   }
 
   else {
@@ -201,12 +195,6 @@ router.post('/create', (req, res) => {
       if (scrap) {
         req.flash('error', 'website already exists');
         res.redirect('/admin/scraps/create');
-        // errors.push({ msg: 'website already exists' });
-        // res.render('admin/scraps/create', {
-        //   errors,
-        //   websitename,
-        //   url,
-        // });
       } else {
         let jsFilePath = path.join(modulePath, file);
 
@@ -216,7 +204,6 @@ router.post('/create', (req, res) => {
           everyMinute,
           jsFilePath
         });
-        // newScrap.jsFilePath = file.path;
         newScrap.save().then(scrap => {
           req.flash('success', `${websitename} was created successfully`);
           res.redirect('/admin/scraps');
@@ -229,19 +216,28 @@ router.post('/create', (req, res) => {
 router.get('/edit-data/:id', async (req, res) => {
   ScrapData.findOne({ _id: req.params.id }).lean().exec(async (err, scrapdata) => {
     let data = JSON.parse(scrapdata.resultData);
+    data = data.map(d => {d.id = uuid.v1();return d;})
+    
     let titles = (data.length > 0) ? Object.keys(data[0]) : [];
     let scrap = await Scrap.findOne({ _id: scrapdata.scrapId })
     if (scrapdata !== undefined && scrapdata !== null && scrapdata.length !== 0) {
-      res.render('admin/scraps/edit-data', { layout: 'index', titles: titles, scrapdata, data: data, scrap })
+      res.render('admin/scraps/edit-data', {
+        layout: 'index',
+        titles: titles,
+        titlesJson: JSON.stringify(titles),
+        scrapdata, 
+        data: data,
+        scrapId: scrap._id,
+        scrap,
+        id: req.params.id 
+      })
+
     }
     else {
       res.redirect('/admin/scraps')
     }
   })
 });
-
-
-
 router.get('/view-logs/:id/:limit?/:skip?', async (req, res) => {
   let id = req.params.id;
   let limit = req.params.limit ? parseInt(req.params.limit) : 10;
@@ -249,7 +245,7 @@ router.get('/view-logs/:id/:limit?/:skip?', async (req, res) => {
   let count = await Log.countDocuments({ scraperId: id });
   let haveMore = limit + skip < count;
   let nextLinkHref = (haveMore) ? `/admin/scraps/view-logs/${id}/${limit}/${skip + limit}` : '';
-  let prevLinkHref = (skip > 0)? `/admin/scraps/view-logs/${id}/${limit}/${skip - limit}` : ''
+  let prevLinkHref = (skip > 0) ? `/admin/scraps/view-logs/${id}/${limit}/${skip - limit}` : ''
   let logs = await Log.find({ scraperId: id }).limit(limit).skip(skip).lean();//.limit({ limit: (limit ? limit : 20) });
   res.render('admin/scraps/view-logs', {
     id: id,
@@ -262,14 +258,25 @@ router.get('/view-logs/:id/:limit?/:skip?', async (req, res) => {
     prevLinkHref
   })
 })
-
-router.post('/delete-logs', async (req, res)=>{
+router.post('/delete-logs', async (req, res) => {
   let id = req.body.id;
-  let websitename = await Scrap.findOne({id: id}).select('websitename')
-  await Log.deleteMany({scraperId: id});
+  let websitename = await Scrap.findOne({ id: id }).select('websitename')
+  await Log.deleteMany({ scraperId: id });
   // req.flash('all logs have been deteled')
   req.flash('success', `all logs for ${websitename} have been deteled`);
   res.redirect(`/admin/scraps/view-logs/${id}`);
 });
+router.post('/update-data', async(req, res)=>{
 
+  let id = req.body.id;
+  let data = req.body.data;
+  console.log({id})
+  let scraperData = await ScrapData.findOne({_id: id});
+  let websitename = await Scrap.findOne({ id: scraperData.scrapId }).select('websitename')
+  scraperData.resultData = JSON.stringify(data);
+  await scraperData.save();
+  req.flash('success', `all logs for ${websitename} have been deteled`);
+  // res.redirect(`/admin/scraps/view/${scraperData.scrapId}`);
+  res.json(true);
+});
 module.exports = router;

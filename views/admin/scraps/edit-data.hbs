@@ -1,4 +1,16 @@
 <div class="uk-overflow-auto">
+    <div class="uk-margin-small">
+        <div class="uk-button-group uk-align-left">
+            <button class="uk-button uk-button-primary" id="save">Save</button>
+            <button class="uk-button uk-button-primary" id="saveCatalog">Update Catalog</button>
+        </div>
+        <div class="uk-button-group uk-align-right">
+            <a href="/admin/scraps/view/{{scrapId}}" class="uk-button uk-button-secondary uk-align-right"
+                type="submit">Back</a>
+        </div>
+    </div>
+
+
     <table id="data-table" class="uk-table uk-table-hover uk-table-middle uk-table-divider">
         <thead>
             <tr>
@@ -12,8 +24,8 @@
             <tr>
                 {{#each this}}
                 <td>
-                    <input value="{{this}}" title="{{this}}">
-                    {{!-- {{this}} --}}
+                    {{!-- <input value="{{this}}" title="{{this}}"> --}}
+                    {{this}}
                 </td>
                 {{/each}}
             </tr>
@@ -29,31 +41,69 @@
     </table>
 </div>
 <script defer>
-    $(document).ready(function () {
-        $('#data-table').DataTable();
-    });
-</script>
-{{!--
+    let tiltes = [{{#each titles }}'{{this}}', {{/each}}];
 
 
-<script type="text/javascript">
-    var data = "{{data}}";
-    $(document).ready(function () {
-        var html = '<table class="table table-striped">';
-        html += '<tr>';
-        var flag = 0;
-        $.each(data[0], function (index, value) {
-            html += '<th>' + index + '</th>';
-        });
-        html += '</tr>';
-        $.each(data, function (index, value) {
-            html += '<tr>';
-            $.each(value, function (index2, value2) {
-                html += '<td>' + value2 + '</td>';
+        $(document).ready(function () {
+
+
+            editor = new $.fn.dataTable.Editor({
+                table: "#data-table",
+                "idSrc": "id",
+                fields: [
+                    {{#each titles }}
+                        {name: '{{this}}', label: '{{this}}'}, 
+                    {{/each}}
+                ]
             });
-            html += '<tr>';
+
+            let dataTable = $('#data-table').DataTable({
+                select: true,
+                columns: [
+                    {{#each titles }}
+                        {data: '{{this}}'}, 
+                    {{/each}}
+                ],
+                select: {
+                    style: 'os',
+                    selector: 'td:first-child'
+                },
+                buttons: [
+                    { extend: "create", editor: editor },
+                    { extend: "edit", editor: editor },
+                    { extend: "remove", editor: editor }
+                ]
+            });
+
+            $('#data-table').on('click', 'tbody td:not(:first-child)', function (e) {
+                editor.inline(this);
+            });
         });
-        html += '</table>';
-        $('body').html(html);
-    });
-</script> --}}
+
+        $('#save').click(async (x) => {
+            var tableData = $("#data-table").DataTable()
+                .rows()
+                .data();
+            data = [];
+            for (var i = 0; i < tableData.length; i++) {
+                obj = {};
+                index = 0;
+                row = tableData[i];
+                data.push(row)
+            }
+
+            const settings = {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: '{{id}}',
+                    data: data
+                })
+            };
+            const fetchResponse = await fetch(`/admin/scraps/update-data`, settings);
+            document.location = '/admin/scraps/view/{{scrapId}}';
+        })
+</script>

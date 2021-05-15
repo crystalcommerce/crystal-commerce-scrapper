@@ -23,8 +23,8 @@ var multer = require('multer')
 const app = express()
 var sessionStore = new session.MemoryStore;
 const port = process.env.PORT || 3000;
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json({limit: '50mb', extended: true}))
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true }))
 app.use(multer().array())
 app.use(cookieParser());
 require('./config/passport')(passport);
