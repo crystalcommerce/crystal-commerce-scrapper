@@ -1,23 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcryptjs');
 const axios = require('axios');
 const cheerio = require('cheerio');
 const arrayToCsv = require('../../helpers/arrayToCsv');
-
 var uuid = require('uuid');
-
-var bodyParser = require('body-parser')
-
-const passport = require('passport');
 var fs = require('fs');
-const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
-var appDir = path.dirname(require.main.filename);
-
 const modulePath = 'modules/';
 var filePath = 'uploads/';
+const Scrap = require('../../models/Scrap');
+const ScrapData = require('../../models/ScrapData');
+const Log = require('../../models/Log');
 
 
 var storage = multer.diskStorage({
@@ -32,14 +26,6 @@ var storage = multer.diskStorage({
   }
 })
 
-var upload = multer({ storage: storage })
-
-
-const Scrap = require('../../models/Scrap');
-const ScrapData = require('../../models/ScrapData')
-const { forwardAuthenticated } = require('../../config/auth');
-
-const app = express();
 
 
 router.get("/", (req, res) => {
@@ -252,8 +238,38 @@ router.get('/edit-data/:id', async (req, res) => {
       res.redirect('/admin/scraps')
     }
   })
-
 });
 
+
+
+router.get('/view-logs/:id/:limit?/:skip?', async (req, res) => {
+  let id = req.params.id;
+  let limit = req.params.limit ? parseInt(req.params.limit) : 10;
+  let skip = req.params.skip ? parseInt(req.params.skip) : 0;
+  let count = await Log.countDocuments({ scraperId: id });
+  let haveMore = limit + skip < count;
+  let nextLinkHref = (haveMore) ? `/admin/scraps/view-logs/${id}/${limit}/${skip + limit}` : '';
+  let prevLinkHref = (skip > 0)? `/admin/scraps/view-logs/${id}/${limit}/${skip - limit}` : ''
+  let logs = await Log.find({ scraperId: id }).limit(limit).skip(skip).lean();//.limit({ limit: (limit ? limit : 20) });
+  res.render('admin/scraps/view-logs', {
+    id: id,
+    layout: 'index',
+    logs: logs,
+    skip: skip,
+    limit: limit,
+    haveMore: haveMore,
+    nextLinkHref,
+    prevLinkHref
+  })
+})
+
+router.post('/delete-logs', async (req, res)=>{
+  let id = req.body.id;
+  let websitename = await Scrap.findOne({id: id}).select('websitename')
+  await Log.deleteMany({scraperId: id});
+  // req.flash('all logs have been deteled')
+  req.flash('success', `all logs for ${websitename} have been deteled`);
+  res.redirect(`/admin/scraps/view-logs/${id}`);
+});
 
 module.exports = router;

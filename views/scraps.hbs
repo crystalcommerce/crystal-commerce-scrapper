@@ -23,9 +23,13 @@
             </td>
             <td>{{jsFilePath}}</td>
             <td class="scrapper-icons">
+
                 <a href="scraps/edit/{{_id}}" class="btn btn-info"><span uk-icon="pencil"></span>Edit</a>
                 <a href="scraps/view/{{_id}}" class="btn btn-info"><span uk-icon="code"></span>View</a>
                 <a href="scraps/delete/{{_id}}" class="btn btn-info"><span uk-icon="trash"></span>Delete</a>
+
+                <a href="/admin/scraps/view-logs/{{_id}}" class="btn btn-download"><span uk-icon="clock"></span>View Logs</a>
+
             </td>
         </tr>
         {{/each}}

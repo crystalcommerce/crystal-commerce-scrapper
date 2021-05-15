@@ -9,6 +9,9 @@ class WSTCG {
     browser = null;
     mainPage = null;
     data = [];
+    log = null;
+    id = null;
+
     config = {
         url: 'https://en.ws-tcg.com/cardlist/list/?cardno=MR/W80-E001',
         base_url: 'https://en.ws-tcg.com/',
@@ -33,8 +36,15 @@ class WSTCG {
     };
 
 
-    constructor() {
+    constructor(id, log) {
         // this.init();
+        this.log = log;
+        this.id = id;
+    }
+
+    logMessage(type, message){
+        if(this.log)
+            this.log(type, this.id , message);
     }
 
     async init() {
@@ -61,6 +71,8 @@ class WSTCG {
     async start(onfinish) {
         ///get urls
         if (!this.browser) await this.init();
+        //
+        this.logMessage('info', 'scraper starter');
 
         if (!this.data) this.data = [];
         const page = await this.browser.newPage();
@@ -124,7 +136,7 @@ class WSTCG {
                     break;
                 }
             } catch (ex) {
-                console.log(ex);
+                this.logMessage('error', ex);
                 break;
             }
 
@@ -132,9 +144,10 @@ class WSTCG {
         await page.waitForTimeout(4000);
         console.log(this.data);
         if (onfinish) onfinish(this.data);
+        this.logMessage('info', 'scrapper finished');
 
         await page.close();
-        console.log("closing pages");
+        this.logMessage('info', 'closing pages');
         await this.close();
         return this.data;
     }

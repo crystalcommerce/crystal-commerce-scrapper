@@ -55,6 +55,22 @@ module.exports = {
         return output;
 
 
-    }
-
+    },
+    toFormatedDate: function(date){
+        if(date instanceof Date){
+            return [date.getDate(),
+                date.getMonth() + 1,
+            date.getFullYear()].join('/') + ' ' +
+                [date.getHours(),
+                date.getMinutes(),
+                date.getSeconds()].join(':');
+        }
+        return date;
+    },
+    ifCond: function(v1, v2, options) {
+        if(v1 === v2) {
+          return options.fn(this);
+        }
+        return options.inverse(this);
+      }
 };
