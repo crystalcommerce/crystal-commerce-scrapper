@@ -41,8 +41,12 @@
                                     <!--div class="uk-text-small uk-text-center">
                                     Don't have account? Email <a href="mailto:omid.am88@gmail.com"> here</a>
                                 </div-->
-                                    <p>Create an account or login</p>
-                                    <a href="/register" class="uk-text-small uk-text-center">Register</a>
+                                    {{#if userDefinded}}
+                                        <p></p>
+                                    {{else}}
+                                        <p>Create an account or login</p>
+                                        <a href="/register" class="uk-text-small uk-text-center">Register</a>
+                                    {{/if}}
                                 </form>
                             </div>
                         </div>

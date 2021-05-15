@@ -101,11 +101,11 @@ router.post('/register', (req, res) => {
               .save()
               .then(user => {
                 req.flash(
-                  'success_msg',
+                  'success',
                   'You are now registered and can log in'
                 );
 
-                res.redirect('../users/login');
+                res.redirect('/');
               })
               .catch(err => console.log(err));
           });
@@ -121,8 +121,9 @@ router.post('/login', urlencodedParser, (req, res, next) => {
 
   passport.authenticate('local', {
     successRedirect: '/dashboard',
-    failureRedirect: '../users/login',
-    failureFlash: true
+    failureRedirect: '/index',
+    failureFlash: 'Invalid username or password.',
+    successFlash: 'Welcome!' 
   })(req, res, next);
 });
 
@@ -131,10 +132,9 @@ router.post('/login', urlencodedParser, (req, res, next) => {
 
 // Logout
 router.get('/logout', (req, res) => {
-  console.log('logoutstart')
   req.logout();
-  req.flash('success_msg', 'You are logged out');
-  res.redirect('../users/login');
+  req.flash('success', 'You are logged out');
+  res.redirect('/index');
 });
 
 
@@ -180,7 +180,7 @@ router.post('/edit/:id', (req, res) => {
         user.password = hash;
         console.log(user.password)
          user.save().then(updatedUser => {
-          req.flash('success_message', `${updatedUser.email} was Updated Successfully`);
+          req.flash('success', `${updatedUser.email} was Updated Successfully`);
           res.redirect('/admin/users');
         }).catch(err => res.status(400).send(`COULD NOT SAVE BECAUSE: ${err}`));
       })
@@ -243,7 +243,7 @@ router.post('/create', (req, res) => {
               .save()
               .then(user => {
                 req.flash(
-                  'success_msg',
+                  'success',
                   'You are now registered and can log in'
                 );
 

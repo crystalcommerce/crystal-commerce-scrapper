@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "NODE_ENV=prod node index.js",
     "server": "babel-node index.js",
-    "dev": "NODE_ENV=local npm-run-all server",
+    "dev": "NODE_ENV=local nodemon --exec babel-node index.js",
     "prod": "NODE_ENV=prod npm-run-all server"
   },
   "author": "Omid Amiri",
@@ -48,6 +48,7 @@
     "pug": "^2.0.4",
     "puppeteer": "^8.0.0",
     "request-promise": "^4.2.6",
+    "simple-flash": "^0.1.3",
     "tingodb": "^0.6.1",
     "uikit": "^3.6.11",
     "uuid": "^7.0.3"

@@ -53,7 +53,7 @@ router.get("/", (req, res) => {
 router.get('/edit/:id', (req, res) => {
 
   Scrap.findById(req.params.id).lean().exec(function (error, scrap) {
-    res.render('scrapedit', { layout: 'index', scrap: scrap });
+    res.render('admin/scraps/edit', { layout: 'index', scrap: scrap });
   });
 });
 
@@ -75,10 +75,11 @@ router.post('/edit/:id', (req, res) => {
   Scrap.findById(id).then(scrap => {
     scrap.websitename = req.body.websitename;
     scrap.url = req.body.url;
+    scrap.everyMinute = req.body.everyMinute;
 
 
     scrap.save().then(updatedScrap => {
-      req.flash('success_message', `${updatedScrap.websitename} was Updated Successfully`);
+      req.flash('success', `${updatedScrap.websitename} was Updated Successfully`);
       res.redirect('/admin/scraps');
     }).catch(err => res.status(400).send(`COULD NOT SAVE BECAUSE: ${err}`));
   });
@@ -104,15 +105,12 @@ router.get('/delete-data/:id', (req, res) => {
   });
 });
 router.get('/download-data/:id', (req, res) => {
-
-  console.log('download started')
-  var scrapname = ''
   ScrapData.find({ _id: req.params.id }).select('resultData').lean().exec((err, scrapdata) => {
 
     if (scrapdata !== undefined && scrapdata !== null && scrapdata.length !== 0) {
 
-      let now  = new Date();
-      var csvFileName = now.getFullYear() + "-"+ now.getMonth() + "-" + now.getDate();
+      let now = new Date();
+      var csvFileName = now.getFullYear() + "-" + now.getMonth() + "-" + now.getDate();
       scrapdata = scrapdata[0]["resultData"];
       if (typeof (scrapdata) == "string") scrapdata = JSON.parse(scrapdata)
       const csvString = arrayToCsv({ data: scrapdata });
@@ -129,16 +127,19 @@ router.get('/download-data/:id', (req, res) => {
 })
 router.get('/view/:id', (req, res) => {
   ///res.send("omidomid");
-  var webname = ''
+  var websitename = '';
+  var disabled = false;
+
   Scrap.findOne({ _id: req.params.id }).then(scrap => {
-    webname = scrap.websitename;
+    websitename = scrap.websitename;
+    disabled = scrap.disabled;
   })
 
   ScrapData.find({ scrapId: req.params.id }).limit(20).
     sort({ createdDate: -1 }).lean().exec((error, scrapdata) => {
-
+      console.log(disabled);
       res.render('admin/scraps/view', {
-        layout: 'index', data: { scrapdata: scrapdata, websitename: webname, scrapid: req.params.id }
+        layout: 'index', data: { disabled: disabled, scrapdata: scrapdata, websitename: websitename, scrapid: req.params.id }
       })
     })
   // Scrap.findById(req.params.id).lean().exec(function (error, scrap) {
@@ -168,7 +169,7 @@ router.get('/delete/:id', (req, res) => {
   ScrapData.deleteMany({ scrapId: req.params.id }).then((reslt) => {
     Scrap.deleteOne({ _id: req.params.id }).then((resd) => {
       // if (fs.existsSync(fileName))
-        // fs.unlinkSync(fileName)
+      // fs.unlinkSync(fileName)
       res.redirect('/admin/scraps');
     })
 
@@ -181,44 +182,45 @@ router.get('/delete/:id', (req, res) => {
 
 
 router.post('/create', (req, res) => {
-  const { websitename, url, everyMinute, file} = req.body;
+  const { websitename, url, everyMinute, file } = req.body;
 
   let errors = [];
 
   if (!websitename || websitename === null) {
-    console.log('website is ', websitename)
     errors.push({ msg: 'website is empty' })
   }
   if (!url || url === null) {
-    console.log('url is ', url)
     errors.push({ msg: 'url is empty' })
   }
 
   if (!file || file === null) {
-    console.log('file is ', file)
     errors.push({ msg: 'file is empty' })
   }
 
 
 
   if (errors.length > 0) {
-    res.render('admin/scraps/create', {
-      errors,
-      websitename,
-      url,
+    req.flash('error', error.map((m) => m.msg).join('\n'));
+    res.redirect('/admin/scraps/create');
+    // , {
+    //   errors,
+    //   websitename,
+    //   url,
 
-    });
+    // }
   }
 
   else {
     Scrap.findOne({ websitename: req.body.websitename }).then(scrap => {
       if (scrap) {
-        errors.push({ msg: 'website already exists' });
-        res.render('admin/scraps/create', {
-          errors,
-          websitename,
-          url,
-        });
+        req.flash('error', 'website already exists');
+        res.redirect('/admin/scraps/create');
+        // errors.push({ msg: 'website already exists' });
+        // res.render('admin/scraps/create', {
+        //   errors,
+        //   websitename,
+        //   url,
+        // });
       } else {
         let jsFilePath = path.join(modulePath, file);
 
@@ -230,11 +232,28 @@ router.post('/create', (req, res) => {
         });
         // newScrap.jsFilePath = file.path;
         newScrap.save().then(scrap => {
+          req.flash('success', `${websitename} was created successfully`);
           res.redirect('/admin/scraps');
         }).catch(err => console.log(err))
       }
     });
   }
 })
+
+router.get('/edit-data/:id', async (req, res) => {
+  ScrapData.findOne({ _id: req.params.id }).lean().exec(async (err, scrapdata) => {
+    let data = JSON.parse(scrapdata.resultData);
+    let titles = (data.length > 0) ? Object.keys(data[0]) : [];
+    let scrap = await Scrap.findOne({ _id: scrapdata.scrapId })
+    if (scrapdata !== undefined && scrapdata !== null && scrapdata.length !== 0) {
+      res.render('admin/scraps/edit-data', { layout: 'index', titles: titles, scrapdata, data: data, scrap })
+    }
+    else {
+      res.redirect('/admin/scraps')
+    }
+  })
+
+});
+
 
 module.exports = router;

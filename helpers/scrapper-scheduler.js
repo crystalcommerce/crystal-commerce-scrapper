@@ -18,21 +18,21 @@ function diff_minutes(dt2, dt1) {
 }
 var CronJob = require('cron').CronJob;
 var job = new CronJob('* * * * *', async function () {
-    console.log(runningScrapper.length)
+    // console.log(runningScrapper.length)
     let scrapers = await Scrap.find();
     for (let i = 0; i < scrapers.length; i++) {
         
         const s = scrapers[i];
         if(s.disabled) continue;
-        console.log("i =>", i);
+        // console.log("i =>", i);
         let id = s.id;
-        console.log('first scrap filter')
+        // console.log('first scrap filter')
         let rss = runningScrapper.filter(rs => {
             console.log(typeof(rs.config.id)); 
             console.log(typeof(id)); 
             return rs.config.id == id
         });
-        console.log("rss.length =>", runningScrapper);
+        // console.log("rss.length =>", runningScrapper);
 
         if (rss.length != 0) {
             console.log('runing');

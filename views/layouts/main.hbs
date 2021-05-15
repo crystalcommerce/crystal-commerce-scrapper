@@ -20,6 +20,18 @@
 </head>
 
 <body>
+    {{#each success}}
+        <script defer>
+            UIkit.notification({message: '{{this}}', status: 'success', timeout: 5000})
+        </script>
+    {{/each}}
+
+    {{#each error}}
+        <script defer>
+            UIkit.notification({message: '{{this}}', status: 'danger', timeout: 5000})
+        </script>
+    {{/each}}
+
     {{{body}}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"
         integrity="sha256-UGwvyUFH6Qqn0PSyQVw4q3vIX0wV1miKTracNJzAWPc=" crossorigin="anonymous"></script>

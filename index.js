@@ -13,34 +13,23 @@ const User = require("./model/User");
 const scheduler = require('./helpers/scrapper-scheduler');
 console.log(`.env.${process.env.NODE_ENV}`);
 let env = process.env.NODE_ENV;
-if(env) 
+if (env)
   env = `.env.${process.env.NODE_ENV}`
-else 
+else
   env = '.env.prod'
-console.log(env)
 require('dotenv').config({ path: env })
 
-var multer  = require('multer')
+var multer = require('multer')
 var upload = multer({ dest: 'uploads/' })
 
-// var m =  require('./modules/dbs-cardgame.js');
-
-// m = new m();
-
-// m.start((data)=>{
-//   console.log(data);
-// })
 const app = express()
+var sessionStore = new session.MemoryStore;
+
 const port = process.env.PORT || 3000;
 const { ensureAuthenticated, forwardAuthenticated } = require('./config/auth');
 
-
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(bodyParser.json());
-
-
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(multer().array())
 app.use(cookieParser());
 
@@ -62,33 +51,28 @@ mongoose
   .connect(process.env.MONGOURI,
     { useNewUrlParser: true }
   )
-  .then(() => console.log('MongoDB Connected'))
+  .then(() => console.log(`MongoDB Connected to ${process.env.MONGOURI}`))
   .catch(err => console.log(err));
 
 
 
 
 
-app.use(
-  session({
-    secret: 'secret',
-    resave: true,
-    saveUninitialized: true
-  })
-);
-
-
+app.use(session({
+  cookie: { maxAge: 60000 },
+  store: sessionStore,
+  saveUninitialized: true,
+  resave: 'true',
+  secret: 'secret'
+}));
 app.use(passport.initialize());
 app.use(passport.session());
-
-
 app.use(flash());
 
 
 app.use(function (req, res, next) {
-  res.locals.success_msg = req.flash('success_msg');
-  res.locals.error_msg = req.flash('error_msg');
-  res.locals.error = req.flash('error');
+  res.locals.success = req.session.success =  req.flash('success');
+  res.locals.error =  req.session.error = req.flash('error');
   next();
 });
 
@@ -99,7 +83,14 @@ const scraps = require('./routes/admin/scraps');
 const dashboard = require('./routes/dashboard')
 //app.use('/users', require('./routes/users.js'));
 
-app.get('/', (req, res) => res.render('index'));
+app.get(['/', '/index', '/home'], async (req, res) => {
+  let user = await User.findOne({ role: 'admin' });
+  let data = {};
+  data.userDefinded = true;
+  if (!user) 
+    data.userDefinded  = false;
+  res.render('index', data)
+});
 
 // app.get('/dashboard', (req, res) =>
 //   res.render('admin_home', {

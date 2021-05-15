@@ -1,10 +1,17 @@
 <div>
+    {{#if data.disabled}}
+    Stoped(
     <a href="/admin/scraps/change-status/{{data.scrapid}}" class="btn btn-info">
         <i class="fas fa-play website-page-icon"></i>
     </a>
+    )
+    {{else}}
+    Running(
     <a href="/admin/scraps/change-status/{{data.scrapid}}" class="btn btn-info">
         <i class="fas fa-stop website-page-icon"></i>
     </a>
+    )
+    {{/if}}
     
 </div>
 <div>From Website: {{data.websitename}}</div>
@@ -20,10 +27,10 @@
         <tr>
             <td>{{createdDate }}</td>
             <td class="scrapper-icons">
+                <a href="/admin/scraps/edit-data/{{_id}}" class="btn btn-download"><span uk-icon="download"></span>View & Edit</a>
                 <a href="/admin/scraps/download-data/{{_id}}" class="btn btn-download"><span uk-icon="download"></span>Download</a>
                 <a href="/admin/scraps/delete-data/{{_id}}" class="btn btn-info"><span uk-icon="trash"></span>Delete</a>
             </td>
         </tr>
         {{/each}}
-    </tbody>
 </table>
